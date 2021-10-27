@@ -2,6 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Book;
+use App\Models\Follower;
+use App\Models\Review;
+use App\Models\SharedBook;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,6 +18,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+//        User::factory(3)->create();
+//        Book::factory(3)->create();
+        Review::factory(3)->create();
+        Follower::factory(3)->create();
+        SharedBook::factory(3)->create();
     }
 }
