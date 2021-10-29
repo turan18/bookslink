@@ -21,6 +21,11 @@
         </style>
     </head>
     <body class="antialiased">
+    <form method="GET" action="/search" class="dark:bg-gray-900">
+        <label for="search" class="bg-white">Search here</label>
+        <input type="text" id="search" name="item">
+        <button type="submit">Go</button>
+    </form>
         <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
             @if (Route::has('login'))
                 <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">

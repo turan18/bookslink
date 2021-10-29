@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\SearchItemsController;
+use App\Services\BookCollector;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('search', SearchItemsController::class);
+
+
