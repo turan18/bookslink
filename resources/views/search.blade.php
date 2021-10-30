@@ -20,22 +20,34 @@
         <li>
             ID: {{$item['id']}}
         </li>
+        <form method="GET" action="{{url("resource/book/{$item['title']}")}}">
+            <input type="hidden" name="id" value="{{$item['id']}}">
+            <button type="submit">View</button>
+        </form>
+
         <li>
             Title: {{$item['title']}}
         </li>
         <li>
             @if(isset($item['authors']))
-                @if(count($item['authors']) == 1)
+                @if(! $item['multiple_authors'])
                     Author: {{$item['authors'][0]}}
                 @else
                     @foreach($item['authors'] as $key=>$value)
                         Author {{$key+1}}: {{$value}}
                     @endforeach
                 @endif
+            @else
+                <b>Author could not be retrieved.</b>
             @endif
         </li>
         <li>
-            Snippet: {!!html_entity_decode(strip_tags($item['snippet'])) !!}
+            @if(isset($item['description']))
+                Snippet: {!! $item['snippet'] !!}
+            @else
+                <b>Snippet could not be retrieved.</b>
+            @endif
+
         </li>
 
     </ul>

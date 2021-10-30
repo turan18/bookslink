@@ -4,16 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Services\BookCollector;
 use Illuminate\Http\Request;
+use Symfony\Component\Console\Input\Input;
 
 class SearchItemsController extends Controller
 {
-    # Single action Controller that retrieves a sanitized array of books.
+    # Retrieve all books matching given query
 
-    public function __invoke(BookCollector $bookCollector)
+    public function index(BookCollector $bookCollector)
     {
-        $items = $bookCollector->retrieve(request()->get('item'));
+        $items = $bookCollector->retrieveAll(request()->get('item'));
 
-        return view('search',["items" => $items]);
+        return view('search',compact('items'));
 
     }
+
+    #Retrive a specific book
+
+    public function show(BookCollector $bookCollector){
+        $item = $bookCollector->retrieveSpecific(request()->get('id'));
+        return view('book',compact('item'));
+
+    }
+
 }
