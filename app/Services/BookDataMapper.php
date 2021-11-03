@@ -27,12 +27,15 @@ class BookDataMapper
 
             ]);
         });
-         return static::sanitizeVolumes(static::$volumes);
+        if(count($arr) == 0){
+            return [];
+        }
+        return static::sanitizeVolumes(static::$volumes);
     }
 
 
 
-    public static function forVolumeKeys($arr): array
+    public static function forSingleVolumeKeys($arr): array
     {
         static::$volume[] = ([
             'id' => $arr['id'] ?? null,
@@ -47,7 +50,8 @@ class BookDataMapper
             'publication_date' => $arr['volumeInfo']['publishedDate'] ?? null,
             'category' => $arr['volumeInfo']['categories'] ?? null,
             'page_count' => $arr['volumeInfo']['pageCount'] ?? null,
-            'embeddable' => $arr['accessInfo']['embeddable'] ?? null
+            'embeddable' => $arr['accessInfo']['embeddable'] ?? null,
+            'link' => $arr['volumeInfo']['previewLink'] ?? null
         ]);
         return static::sanitizeVolume(static::$volume);
 

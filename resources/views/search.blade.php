@@ -14,46 +14,68 @@
 </style>
 <body style="background: #1a202c">
 {{--{{ddd($items)}}--}}
-@foreach($items as $item)
-    <ul>
-        <img src="{{$item['large-thumbnail'] ?? $item['thumbnail']}}">
-        <li>
-            ID: {{$item['id']}}
-        </li>
-        <form method="GET" action="{{url("resource/book/{$item['title']}")}}">
-            <input type="hidden" name="id" value="{{$item['id']}}">
-            <button type="submit">View</button>
-        </form>
 
-        <li>
-            Title: {{$item['title']}}
-        </li>
-        <li>
-            @if(isset($item['authors']))
-                @if(! $item['multiple_authors'])
-                    Author: {{$item['authors'][0]}}
+<form method="GET" action='/search' class="dark:bg-gray-900">
+    <label for="search" class="bg-white">Search here</label>
+    <input type="text" id="search" name="item">
+    <button type="submit">Go</button>
+</form>
+
+<a href="{{route('users',['username'=>request()->get('item')])}}">Users</a>
+
+@if(count($items) > 0)
+
+    @foreach($items as $item)
+        <ul>
+            <img src="{{$item['large-thumbnail'] ?? $item['thumbnail']}}">
+            <li>
+                ID: {{$item['id']}}
+            </li>
+            <form method="GET" action="{{url("resource/book/{$item['title']}")}}">
+                <input type="hidden" name="id" value="{{$item['id']}}">
+                <button type="submit">View</button>
+            </form>
+
+            <li>
+                Title: {{$item['title']}}
+            </li>
+            <li>
+                @if(isset($item['authors']))
+                    @if(! $item['multiple_authors'])
+                        Author: {{$item['authors'][0]}}
+                    @else
+                        @foreach($item['authors'] as $key=>$value)
+                            Author {{$key+1}}: {{$value}}
+                        @endforeach
+                    @endif
                 @else
-                    @foreach($item['authors'] as $key=>$value)
-                        Author {{$key+1}}: {{$value}}
-                    @endforeach
+                    <b>Author could not be retrieved.</b>
                 @endif
-            @else
-                <b>Author could not be retrieved.</b>
-            @endif
-        </li>
-        <li>
-            @if(isset($item['description']))
-                Snippet: {!! $item['snippet'] !!}
-            @else
-                <b>Snippet could not be retrieved.</b>
-            @endif
+            </li>
+            <li>
+                @if(isset($item['description']))
+                    Snippet: {!! $item['snippet'] !!}
+                @else
+                    <b>Snippet could not be retrieved.</b>
+                @endif
 
-        </li>
+            </li>
 
-    </ul>
+        </ul>
 
 
-@endforeach
+    @endforeach
+
+
+@else
+    <h1>No book results found.</h1>
+@endif
+
+
+
+
+
+
 
 </body>
 </html>

@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -11,9 +15,12 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
-        //
+        $users = User::where('username','like','%' . request()->get('username') . '%')->get();
+
+        return view('search-users',compact('users'));
     }
 
     /**
@@ -34,7 +41,18 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+
+
+        $user = User::create($request->validate([
+            'username' => ['required','max:255','min:3',Rule::unique('users','username')],
+            'email' => ['required','email','max:255',Rule::unique('users','email')],
+            'password' => ['required','max:255','min:5']
+        ]));
+
+        auth()->login($user);
+
+        return back()->with('success','Your account has been created.');
     }
 
     /**

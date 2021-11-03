@@ -15,12 +15,12 @@ class BookCollector
         $this->client = $client;
     }
 
-    public function retrieveAll(string $title,$filters = ['maxResults'=>'20']){
+    public function retrieveAll(string $title,$filters = ['maxResults'=>'10']){
         return BookDataMapper::forAllVolumesKeys($this->client->volumes->listVolumes($title, $filters));
     }
 
     public function retrieveSpecific(string $id){
-        return BookDataMapper::forVolumeKeys($this->client->volumes->get($id));
+        return BookDataMapper::forSingleVolumeKeys($this->client->volumes->get($id));
     }
 
 
