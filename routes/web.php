@@ -1,10 +1,10 @@
 <?php
 
+use App\Http\Controllers\FavoritesController;
+use App\Http\Controllers\LoadMore;
 use App\Http\Controllers\SearchItemsController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\UserController;
-use App\Services\BookCollector;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,14 +21,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('home');
 });
-Route::get('search', [SearchItemsController::class,'index']);
-Route::get('resource/book/{title}',[SearchItemsController::class,'show']);
-Route::get('resource/user',[UserController::class,'index'])->name('users');
-
 
 Route::post('register',[UserController::class,'store'])->middleware('guest');
 Route::post('login',[SessionController::class,'store'])->middleware('guest');
-
-
 Route::post('logout',[SessionController::class,'destroy'])->middleware('auth');
+
+Route::get('search', [SearchItemsController::class,'index']);
+Route::get('resource/book/{title}',[SearchItemsController::class,'show']);
+Route::get('partials/user',[UserController::class,'index'])->name('users');
+Route::get('partials/books',[LoadMore::class,'index']);
+
+Route::post('favorite-item',[FavoritesController::class,'store'])->middleware('auth')->name('add_to_favorites');
 

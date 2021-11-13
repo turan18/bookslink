@@ -12,18 +12,26 @@ class SessionController extends Controller
     public function store(Request $request){
 
         $attributes = $request->validate([
-            'username' => ['required'],
+            'user' => ['required'],
             'password' => ['required']
         ]);
 
+        $attributes['username'] = $attributes['user'] ;
+        unset($attributes['user']);
+
+
         if(auth()->attempt($attributes)){
             return back()->with('success','Welcome back!');
-
         }
 
-        throw ValidationException::withMessages([
-            'username' => 'Given credentials could not be verified.'
-        ]);
+        return back()->
+        withInput()->
+        withErrors(['login'=>'Given credentials could not be verified.']);
+
+
+//        throw ValidationException::withMessages([
+//            'login' => 'Given credentials could not be verified.'
+//        ]);
 
     }
     public function destroy(){

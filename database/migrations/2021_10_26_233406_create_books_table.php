@@ -19,16 +19,9 @@ class CreateBooksTable extends Migration
             $table->string('title');
             $table->string('author');
             $table->smallInteger('full_rating')->default('0');
+            $table->string('category')->nullable();
             $table->longText('description')->nullable();
-
-//            $table->mediumText('snippet')->nullable();
-//            $table->string('publisher');
-//            $table->date('publication_date');
-//            $table->string('isbn_13')->unique();
-//            $table->string('language');
-//            $table->string('maturity');
-//            $table->string('category');
-//            $table->tinyInteger('embeddable');
+            $table->longText('thumbnail')->nullable();
             $table->timestamps();
         });
     }

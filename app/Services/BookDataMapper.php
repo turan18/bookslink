@@ -68,6 +68,7 @@ class BookDataMapper
             else{
                 $book['multiple_authors'] = false;
             }
+            $book['description'] = html_entity_decode(strip_tags($book['description']));
             $book['thumbnail'] = str_replace('http','https',$book['thumbnail']);
             $book['snippet'] = static::snippet(html_entity_decode(strip_tags($book['description'])),30);
         }
@@ -86,11 +87,14 @@ class BookDataMapper
         if (isset($book['thumbnail'])){
             $book['thumbnail'] = str_replace('http','https',$book['thumbnail']);
         }
+        if(is_null($book['authors'])){
+            $book['authors'] = ['No author found.'];
+        }
         if (isset($book['large-thumbnail'])){
             $book['large-thumbnail'] = str_replace('http','https',$book['large-thumbnail']);
         }
+        $book['description'] = html_entity_decode(strip_tags($book['description']));
         $book['snippet'] = static::snippet(html_entity_decode(strip_tags($book['description'])),30);
-
         return $book;
     }
 

@@ -10,4 +10,5 @@ class FavoritedBook extends Model
     use HasFactory;
 
 
+
 }

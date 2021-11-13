@@ -2,25 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Book;
+use App\Models\FavoritedBook;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Validation\Rule;
 
-class UserController extends Controller
+
+class FavoritesController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-
     public function index()
     {
-        $users = User::where('username','like','%' . request()->get('username') . '%')->get();
-
-        return view('partials._users',compact('users'));
+        //
     }
 
     /**
@@ -41,15 +37,20 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $user = User::create($request->validateWithBag('register',[
-            'username' => ['required','max:255','min:3',Rule::unique('users','username')],
-            'email' => ['required','email','max:255',Rule::unique('users','email')],
-            'password' => ['required','max:255','min:5']
-        ]));
 
-        auth()->login($user);
+        $db_book = Book::updateOrCreate(
+            $request->except('_token','thumbnail'),
+            ['thumbnail' => $request->get('thumbnail')]
+        );
 
-        return back()->with('success','Your account has been created.');
+        if(FavoritedBook::where('user_id',auth()->user()->id)->where('book_id',$db_book->id)->exists()){
+            $message = "'" . $db_book->title . "'" . ' is already in your favorites';
+        }
+        else{
+            FavoritedBook::create(['user_id' => auth()->user()->id,'book_id' => $db_book->id]);
+            $message = "'" . $db_book->title . "'" . ' was added to your favorites';
+        }
+        return back()->with('message', $message);
     }
 
     /**

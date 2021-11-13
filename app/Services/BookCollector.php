@@ -22,6 +22,4 @@ class BookCollector
     public function retrieveSpecific(string $id){
         return BookDataMapper::forSingleVolumeKeys($this->client->volumes->get($id));
     }
-
-
 }

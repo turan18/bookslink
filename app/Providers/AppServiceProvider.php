@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Services\BookCollector;
 use Google\Client;
 use Google\Service\Books;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -32,6 +33,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Model::unguard();
     }
 }
