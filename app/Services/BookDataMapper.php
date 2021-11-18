@@ -17,7 +17,7 @@ class BookDataMapper
          collect($arr->getItems())->map(function ($arr){
 
             static::$volumes[] = ([
-                'id' => $arr['id'] ?? null,
+                'volume_id' => $arr['id'] ?? null,
                 'thumbnail' => $arr['volumeInfo']['imageLinks']['thumbnail'] ?? null,
                 'large-thumbnail' => $arr['volumeInfo']['imageLinks']['large'] ?? null,
                 'authors' => $arr['volumeInfo']['authors'] ?? null,
@@ -38,17 +38,17 @@ class BookDataMapper
     public static function forSingleVolumeKeys($arr): array
     {
         static::$volume[] = ([
-            'id' => $arr['id'] ?? null,
+            'volume_id' => $arr['id'] ?? null,
             'thumbnail' => $arr['volumeInfo']['imageLinks']['thumbnail'] ?? null,
             'large-thumbnail' => $arr['volumeInfo']['imageLinks']['large'] ?? null,
             'authors' => $arr['volumeInfo']['authors'] ?? null,
             'title' => $arr['volumeInfo']['title'] ?? null,
-            'description' => $arr['volumeInfo']['description'] ?? null,
+            'description' => strip_tags($arr['volumeInfo']['description']) ?? null,
             'subtitle' => $arr['volumeInfo']['subtitle'] ?? null,
-            'isbn_13' => $arr['volumeInfo']['industryIdentifiers'] ?? null,
+            'isbn_13' => $arr['volumeInfo']['industryIdentifiers'][1]['identifier'] ?? null,
             'publisher' => $arr['volumeInfo']['publisher'] ?? null,
             'publication_date' => $arr['volumeInfo']['publishedDate'] ?? null,
-            'category' => $arr['volumeInfo']['categories'] ?? null,
+            'categories' => $arr['volumeInfo']['categories'] ?? null,
             'page_count' => $arr['volumeInfo']['pageCount'] ?? null,
             'embeddable' => $arr['accessInfo']['embeddable'] ?? null,
             'link' => $arr['volumeInfo']['previewLink'] ?? null
@@ -77,25 +77,27 @@ class BookDataMapper
 
     private static function sanitizeVolume($volume)
     {
-        $book = collect($volume)->first();
-        if (isset($book['authors']) && count($book['authors']) > 1){
-            $book['multiple_authors'] = true;
+        $book_collection = collect(collect($volume)->first());
+
+        if (isset($book_collection['thumbnail'])){
+            $book_collection['thumbnail'] = str_replace('http','https',$book_collection['thumbnail']);
         }
-        else{
-            $book['multiple_authors'] = false;
+
+        if (isset($book_collection['large-thumbnail'])){
+            $book_collection['large-thumbnail'] = str_replace('http','https',$book_collection['large-thumbnail']);
         }
-        if (isset($book['thumbnail'])){
-            $book['thumbnail'] = str_replace('http','https',$book['thumbnail']);
+        $book_collection['description'] = html_entity_decode(strip_tags($book_collection['description']));
+        $book_collection['snippet'] = static::snippet(html_entity_decode(strip_tags($book_collection['description'])),30);
+
+        if(isset($book_collection['categories'])){
+            $categories = explode('/',implode('',$book_collection['categories']));
+            $book_collection['categories'] = implode('|',array_slice($categories, 0, 3));
         }
-        if(is_null($book['authors'])){
-            $book['authors'] = ['No author found.'];
+        if(isset($book_collection['authors'])){
+            $authors = implode(',',$book_collection['authors']);
+            $book_collection['authors'] = $authors;
         }
-        if (isset($book['large-thumbnail'])){
-            $book['large-thumbnail'] = str_replace('http','https',$book['large-thumbnail']);
-        }
-        $book['description'] = html_entity_decode(strip_tags($book['description']));
-        $book['snippet'] = static::snippet(html_entity_decode(strip_tags($book['description'])),30);
-        return $book;
+        return $book_collection->toArray();
     }
 
     private static function snippet($text, $limit): string

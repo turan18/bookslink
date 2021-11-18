@@ -50,7 +50,7 @@ class User extends Authenticatable
     ];
 
     public function favorite_books(){
-        return $this->hasMany(FavoritedBook::class,);
+        return $this->hasMany(FavoritedBook::class);
     }
 
     public function shared_books(){

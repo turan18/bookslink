@@ -8,5 +8,4 @@
 <link href="https://fonts.googleapis.com/css2?family=Alegreya&family=Salsa&display=swap" rel="stylesheet">
 <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 <script src="{{asset('js/auth-modal.js')}}" defer></script>
-<script src="{{asset('js/auth.js')}}" defer></script>
 <script src="//unpkg.com/alpinejs" defer></script>

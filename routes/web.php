@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\LoadMore;
+use App\Http\Controllers\ReviewsController;
 use App\Http\Controllers\SearchItemsController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\UserController;
@@ -28,8 +29,10 @@ Route::post('logout',[SessionController::class,'destroy'])->middleware('auth');
 
 Route::get('search', [SearchItemsController::class,'index']);
 Route::get('resource/book/{title}',[SearchItemsController::class,'show']);
+
 Route::get('partials/user',[UserController::class,'index'])->name('users');
 Route::get('partials/books',[LoadMore::class,'index']);
 
 Route::post('favorite-item',[FavoritesController::class,'store'])->middleware('auth')->name('add_to_favorites');
 
+Route::post('review',[ReviewsController::class,'store'])->middleware('auth');

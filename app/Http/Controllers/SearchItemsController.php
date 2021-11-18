@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Book;
+use App\Models\Review;
 use App\Services\BookCollector;
 use Illuminate\Http\Request;
 use Symfony\Component\Console\Input\Input;
@@ -21,8 +23,18 @@ class SearchItemsController extends Controller
     #Retrive a specific book
 
     public function show(BookCollector $bookCollector){
-        $item = $bookCollector->retrieveSpecific(request()->get('id'));
-        return view('book',compact('item'));
+        $item = Book::firstWhere('volume_id',request()->get('volume_id'));
+
+
+        if(!$item){
+            $item = $bookCollector->retrieveSpecific(request()->get('volume_id'));
+            $reviews = null;
+        }
+        else{
+            $reviews = $item->reviews()->with('user')->paginate(5)->withQueryString();
+
+        }
+        return view('book',compact('item','reviews'));
 
     }
 

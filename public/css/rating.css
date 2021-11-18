@@ -1,0 +1,35 @@
+
+.r-sel ~ i, .r-sel{
+    color:red;
+}
+.fav-btn:active,.fav-btn:hover{
+    color:red;
+}
+
+.stars-container{
+    direction: rtl;
+}
+
+
+.rating {
+    direction: rtl;
+}
+
+.rating > label {
+    float: right;
+    cursor: pointer;
+
+}
+
+.rating > label:hover,
+.rating > label:hover ~ label,
+.rating > input.btn:checked ~ label {
+    color: red;
+}
+
+.rating > label:hover:before,
+.rating > label:hover ~ label:before,
+.rating > input.btn:checked ~ label:before,
+.rating > input.btn:checked ~ label:before {
+    color: red;
+}

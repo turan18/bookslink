@@ -1,4 +1,4 @@
-<div id="login-modal" class="fixed top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/4 rounded-lg bg-purple-500 opacity-0 pointer-events-none transition duration-500 ease-in-out">
+<div id="login-modal" class="fixed top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/4 rounded-lg opacity-0 pointer-events-none transition duration-500 ease-in-out z-10">
     <div class="content relative">
         <form method="POST" id="login-form" action="/login" class="p-10 bg-white rounded flex justify-center items-center flex-col shadow-md">
             @csrf

@@ -38,19 +38,20 @@ class FavoritesController extends Controller
     public function store(Request $request)
     {
 
+
         $db_book = Book::updateOrCreate(
             $request->except('_token','thumbnail'),
             ['thumbnail' => $request->get('thumbnail')]
         );
 
         if(FavoritedBook::where('user_id',auth()->user()->id)->where('book_id',$db_book->id)->exists()){
-            $message = "'" . $db_book->title . "'" . ' is already in your favorites';
+            return back()->withErrors(['errors' => 'This book is already in your favorites!']);
         }
         else{
             FavoritedBook::create(['user_id' => auth()->user()->id,'book_id' => $db_book->id]);
-            $message = "'" . $db_book->title . "'" . ' was added to your favorites';
+//            $message = "'" . $db_book->title . "'" . ' was added to your favorites';
         }
-        return back()->with('message', $message);
+        return back()->with(['success' => "'" . $db_book->title . "'" . ' was added to your favorites']);
     }
 
     /**

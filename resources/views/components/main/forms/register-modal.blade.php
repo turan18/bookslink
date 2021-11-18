@@ -1,4 +1,4 @@
-<div id="register-modal" class="fixed top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/4 opacity-0 pointer-events-none transition duration-500 ease-in-out rounded-lg">
+<div id="register-modal" class="fixed top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/4 opacity-0 pointer-events-none transition duration-500 ease-in-out rounded-lg z-10">
     <div class="content text-black">
         <form method="POST" action="/register" id="register-form" class="p-10 bg-white rounded flex justify-center items-center flex-col shadow-md">
             @csrf

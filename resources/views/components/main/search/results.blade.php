@@ -20,7 +20,12 @@
                                                 {{$item['authors'][0]}}
                                             @else
                                                 @foreach($item['authors'] as $key=>$value)
-                                                    {{$value}},
+                                                    @unless($loop->last)
+                                                        {{$value}},
+                                                    @else
+                                                        {{$value}}
+                                                    @endunless
+
                                                 @endforeach
                                             @endif
                                         @else
@@ -31,14 +36,14 @@
                                 </div>
                                 <div class="w-1/4 flex flex-col items-end">
                                     <form method="GET" class="w-1/2" action="resource/book/{{urlencode($item['title'])}}">
-                                        <input type="hidden" name="id" value="{{$item['id']}}">
+                                        <input type="hidden" name="volume_id" value="{{$item['volume_id']}}">
                                         <button class="bg-indigo-500 rounded-lg py-2 w-full" type="submit">View</button>
                                     </form>
                                 </div>
                             </div>
 
                             <div class="mt-4 mb-2">
-                                <p class="font-salsa">
+                                <p class="font-salsa break-words">
                                     @if(isset($item['description']))
                                         {!! $item['snippet'] !!}
                                     @else

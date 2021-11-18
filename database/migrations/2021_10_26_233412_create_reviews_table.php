@@ -19,8 +19,8 @@ class CreateReviewsTable extends Migration
             $table->foreignId('book_id')->constrained()->cascadeOnDelete();
             $table->smallInteger('rating');
             $table->longText('review_body');
-            $table->integer('upvote');
-            $table->integer('downvote');
+            $table->integer('upvote')->default(0);
+            $table->integer('downvote')->default(0);
             $table->timestamps();
         });
     }
