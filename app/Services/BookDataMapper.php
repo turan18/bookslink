@@ -12,7 +12,7 @@ class BookDataMapper
     public static $volumes;
     public static $volume;
 
-    public static function forAllVolumesKeys($arr): array
+    public static function forAllVolumesKeys($arr,$db_books): array
     {
          collect($arr->getItems())->map(function ($arr){
 
@@ -30,7 +30,7 @@ class BookDataMapper
         if(count($arr) == 0){
             return [];
         }
-        return static::sanitizeVolumes(static::$volumes);
+        return static::sanitizeVolumes(static::$volumes,$db_books);
     }
 
 
@@ -59,7 +59,7 @@ class BookDataMapper
 
 
 
-    private static function sanitizeVolumes(array $books): array
+    private static function sanitizeVolumes(array $books,array $db_books): array
     {
         foreach ($books as &$book){
             if (isset($book['authors']) && count($book['authors']) > 1){
@@ -72,7 +72,7 @@ class BookDataMapper
             $book['thumbnail'] = str_replace('http','https',$book['thumbnail']);
             $book['snippet'] = static::snippet(html_entity_decode(strip_tags($book['description'])),30);
         }
-        return $books;
+        return static::addRating($books,$db_books);
     }
 
     private static function sanitizeVolume($volume)
@@ -98,6 +98,18 @@ class BookDataMapper
             $book_collection['authors'] = $authors;
         }
         return $book_collection->toArray();
+    }
+
+
+    private static function addRating($api_books,$db_books): array{
+        foreach ($db_books as $book) {
+            foreach ($api_books as &$item) {
+                if($item['volume_id'] == $book['volume_id']){
+                    $item['full_rating'] = $book['full_rating'];
+                }
+            }
+        }
+        return $api_books;
     }
 
     private static function snippet($text, $limit): string

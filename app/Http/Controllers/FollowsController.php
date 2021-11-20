@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Book;
-use App\Models\FavoritedBook;
+use App\Models\Follower;
 use Illuminate\Http\Request;
 
-
-class FavoritesController extends Controller
+class FollowsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -37,24 +35,14 @@ class FavoritesController extends Controller
      */
     public function store(Request $request)
     {
+        $validatedData = $request->validate([
+            'user_id' => 'required',
+            'user_follower_id' => 'required|unique:followers,user_follower_id,NULL,user_id' . $request->get('user_id')
+        ]);
 
+        Follower::create($validatedData);
+        return json_encode(['Success'=>'OK']);
 
-        $db_book = Book::updateOrCreate(
-            $request->except('_token','thumbnail'),
-            [
-                'thumbnail' => $request->get('thumbnail'),
-                'link' => $request->get('link')
-            ]
-        );
-
-        if(FavoritedBook::where('user_id',auth()->user()->id)->where('book_id',$db_book->id)->exists()){
-            return back()->withErrors(['errors' => 'This book is already in your favorites!']);
-        }
-        else{
-            FavoritedBook::create(['user_id' => auth()->user()->id,'book_id' => $db_book->id]);
-//            $message = "'" . $db_book->title . "'" . ' was added to your favorites';
-        }
-        return back()->with(['success' => "'" . $db_book->title . "'" . ' was added to your favorites']);
     }
 
     /**
@@ -97,8 +85,11 @@ class FavoritesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        Follower::where('user_id',$request->get('user_id'))
+                ->where('user_follower_id',$request->get('user_follower_id'))->delete();
+
+        return json_encode(['Sucess'=>'Unfollowed']);
     }
 }

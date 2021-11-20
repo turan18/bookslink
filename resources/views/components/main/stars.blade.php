@@ -1,4 +1,11 @@
+@if($rating == 0)
+    <i class="fa fa-star fa-sm r-five" ></i>
+    <i class="fa fa-star fa-sm r-four" ></i>
+    <i class="fa fa-star fa-sm r-three" ></i>
+    <i class="fa fa-star fa-sm r-two" ></i>
+    <i class="fa fa-star fa-sm r-one" ></i>
 
+@endif
 
 @if($rating == 1)
     <i class="fa fa-star fa-sm r-five" ></i>

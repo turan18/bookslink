@@ -19,10 +19,18 @@
 
         <div class="flex flex-col mt-8 w-1/5 text-white self-start">
 
-            <div class="flex justify-center h-5/6 max-h-5/6">
+            <div class="flex justify-center h-5/6 max-h-5/6 pb-2">
                 <img src="{{$item['large-thumbnail'] ?? $item['thumbnail'] }}}}" class="max-h-full rounded-lg bg-cover" alt="Thumbnail">
             </div>
-            <div class="text-center">5 stars</div>
+            <div class="flex justify-center pb-2">
+                <div class="flex stars-container">
+                    @isset($item['full_rating'])
+                        <x-main.stars :rating="$item['full_rating']"></x-main.stars>
+                    @else
+                        <x-main.stars :rating="0"></x-main.stars>
+                    @endisset
+                </div>
+            </div>
             <div class="flex justify-center">
                 <form method="POST" action="{{route('add_to_favorites')}}">
                     @csrf
@@ -36,6 +44,7 @@
                     <input type="hidden" name="publication_date" value="{{$item['publication_date'] ?? null}}">
                     <input type="hidden" name="page_count" value="{{$item['page_count'] ?? null}}">
                     <input type="hidden" name="thumbnail" value="{{(($item['large-thumbnail']) ?? $item['thumbnail'])}}">
+                    <input type="hidden" name="link" value="{{$item['link']}}">
 
 
 
@@ -135,6 +144,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="rounded-lg bg-indigo-900 mt-8 mx-12 p-3 w-full flex justify-center">
                 <p class="text-white font-aleg leading-loose text-md">
                     @if(isset($item['description']) && strlen($item['description']) > 0)
@@ -158,6 +168,14 @@
                     @endif
                 </p>
             </div>
+            <div class="flex justify-end mt-8">
+                <div class="flex w-1/4 justify-end text-white gap-x-4">
+                    <button class="bg-blue-800 font-salsa rounded-lg p-2 w-1/3">Read</button>
+                    <button class="bg-blue-800 font-salsa rounded-lg p-2 w-1/3">Share</button>
+                    <a class="bg-blue-800 font-salsa rounded-lg p-2 w-1/3 text-center" href="{{$item['link']}}">Preview</a>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
@@ -183,6 +201,7 @@
                     <input type="hidden" name="page_count" value="{{$item['page_count'] ?? null}}">
                     <input type="hidden" name="description" value="{{$item['description'] ?? null}}">
                     <input type="hidden" name="thumbnail" value="{{$item['large-thumbnail'] ?? $item['thumbnail']}}">
+                    <input type="hidden" name="link" value="{{$item['link']}}">
 
 
                     <div class="w-full h-3/5">
@@ -214,12 +233,20 @@
 
 
 
-    @isset($reviews)
-{{--        <div class="mt-12">--}}
-{{--            <p class="text-4xl text-white pl-10 font-salsa underline">--}}
-{{--                {{$reviews->count()}} Review(s)--}}
-{{--            </p>--}}
-{{--        </div>--}}
+    @if(isset($reviews) && $reviews->count() > 0)
+        <div class="mt-12">
+            <p class="text-4xl text-white pl-10 font-salsa underline">
+                @if($reviews->count() == 1)
+                    {{$reviews->count()}} Review
+
+                @else
+                    {{$reviews->count()}} Review(s)
+                @endif
+
+            </p>
+
+
+        </div>
         <div class="flex flex-col text-lg w-2/6 gap-y-12 mt-12 ml-10">
             @foreach ($reviews as $review)
                 <div class="flex gap-x-2 w-full pl-2 pr-4 py-2 bg-gray-200 rounded-lg">
@@ -228,7 +255,15 @@
                             <img src="https://picsum.photos/seed/picsum/100/100" class="rounded-lg">
                         </div>
                         <div class="flex justify-center mt-2">
-                            <button class="p-1 bg-blue-500 text-white text-sm rounded-lg">Follow</button>
+                            @auth()
+                                @unless(auth()->user()->id == $review->user->id)
+                                    @if(auth()->user()->following->contains('user_id',$review->user->id))
+                                        <button id="unfollow_button" class="p-1 bg-red-500 text-white text-sm rounded-lg" onclick="unfollowUser({{auth()->user()->id}},{{$review->user->id}})">Unfollow</button>
+                                    @else
+                                        <button id="follow_button" class="p-1 bg-blue-500 text-white text-sm rounded-lg" onclick="followUser({{auth()->user()->id}},{{$review->user->id}})">Follow</button>
+                                    @endif
+                                @endunless
+                            @endauth
                         </div>
                     </div>
                     <div class="w-4/5 flex flex-col pb-2">
@@ -268,12 +303,12 @@
 
 
     @else
-        <div class="mt-12">
-            <p class="text-4xl text-white pl-10 font-salsa underline">
+        <div class="mt-24 pl-10">
+            <p class="text-4xl text-white font-salsa">
                 No reviews yet.
             </p>
         </div>
-    @endisset
+    @endif
 
 
     </div>
@@ -309,6 +344,56 @@
         show_less.classList.add('hidden');
         show_less_button.classList.add('hidden');
 
+    }
+    function followUser(follower,user){
+        const follow_button = document.querySelector('#follow_button');
+        follow_button.textContent = 'Unfollow';
+        follow_button.classList.remove('bg-blue-500');
+        follow_button.classList.add('bg-red-500');
+        follow_button.setAttribute('onclick',`unfollowUser(${follower},${user})`);
+        follow_button.id = 'unfollow_button';
+
+
+        fetch('/follow',{
+            method: "post",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({
+                user_follower_id: follower,
+                user_id: user
+
+            })
+        }).then((response) => response.json()).then((data) => {console.log('Success',data)})
+
+
+    }
+
+
+    function unfollowUser(follower,user){
+        const unfollow_button = document.querySelector('#unfollow_button');
+        unfollow_button.textContent = 'Follow';
+        unfollow_button.classList.remove('bg-red-500');
+        unfollow_button.classList.add('bg-blue-500');
+        unfollow_button.setAttribute('onclick',`followUser(${follower},${user})`);
+        unfollow_button.id = 'follow_button';
+
+
+        fetch('/unfollow',{
+            method: "post",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({
+                user_follower_id: follower,
+                user_id: user
+
+            })
+        }).then((response) => response.json()).then((data) => {console.log('Success',data)})
     }
 
 </script>

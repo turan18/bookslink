@@ -14,7 +14,8 @@ class SearchItemsController extends Controller
 
     public function index(BookCollector $bookCollector)
     {
-        $items = $bookCollector->retrieveAll(request()->get('item'));
+        $items = $bookCollector->retrieveAll(request()->get('item'),[],Book::all()->toArray());
+
 
         return view('search',compact('items'));
 
@@ -24,7 +25,6 @@ class SearchItemsController extends Controller
 
     public function show(BookCollector $bookCollector){
         $item = Book::firstWhere('volume_id',request()->get('volume_id'));
-
 
         if(!$item){
             $item = $bookCollector->retrieveSpecific(request()->get('volume_id'));

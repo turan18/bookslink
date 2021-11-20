@@ -37,11 +37,7 @@ class ReviewsController extends Controller
     public function store(Request $request)
     {
 
-
-
-
-
-        $book = Book::updateOrCreate($request->except('_token','review','rating','thumbnail'),['thumbnail' => $request->get('thumbnail')]);
+        $book = Book::updateOrCreate($request->except('_token','review','rating','thumbnail'),['thumbnail' => $request->get('thumbnail'),'link'=>$request->get('link')]);
 
 
 

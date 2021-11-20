@@ -26,6 +26,7 @@ class CreateBooksTable extends Migration
             $table->string('page_count')->nullable();
             $table->smallInteger('full_rating')->default('0');
             $table->longText('thumbnail')->nullable();
+            $table->longText('link')->nullable();
             $table->timestamps();
         });
     }

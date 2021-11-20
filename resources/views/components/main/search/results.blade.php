@@ -12,8 +12,16 @@
 
                             <div class="flex border-b border-black pb-2">
                                 <div class="flex flex-col w-3/4">
-                                    <p class="font-extrabold font-aleg text-lg">{{$item['title']}}</p>
-                                    <div>5 stars</div>
+                                    <p class="font-extrabold font-aleg text-lg pb-1">{{$item['title']}}</p>
+                                    <div class="flex justify-start pb-2">
+                                        <div class="flex stars-container">
+                                            @isset($item['full_rating'])
+                                                <x-main.stars :rating="$item['full_rating']"></x-main.stars>
+                                            @else
+                                                <x-main.stars :rating="0"></x-main.stars>
+                                            @endisset
+                                        </div>
+                                    </div>
                                     <p class="text-sm font-aleg">By:
                                         @if(isset($item['authors']))
                                             @if(! $item['multiple_authors'])
