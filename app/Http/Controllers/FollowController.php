@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Follower;
-use Illuminate\Http\Request;
+use App\Models\Follow;
 
-class FollowsController extends Controller
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+
+class FollowController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -35,23 +38,26 @@ class FollowsController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'user_id' => 'required',
-            'user_follower_id' => 'required|unique:followers,user_follower_id,NULL,user_id' . $request->get('user_id')
+        $request->validate([
+            'user_id' => Rule::unique('follows')->where(function($query) use ($request) {
+                return $query->where('user_id',auth()->user()->id);
+            })
         ]);
 
-        Follower::create($validatedData);
-        return json_encode(['Success'=>'OK']);
+        $follow_this_user = User::where('id',$request->get('user_id'))->get();
+        auth()->user()->following()->attach($follow_this_user,['followed_at'=>now(),'updated_at'=>now()]);
 
+
+        return response()->json(['Success'=>'Followed'],200);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Follow  $follow
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Follow $follow)
     {
         //
     }
@@ -59,10 +65,10 @@ class FollowsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Follow  $follow
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Follow $follow)
     {
         //
     }
@@ -71,10 +77,10 @@ class FollowsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Follow  $follow
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Follow $follow)
     {
         //
     }
@@ -82,14 +88,15 @@ class FollowsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+//     * @param  \App\Models\Follow  $follow
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request)
     {
-        Follower::where('user_id',$request->get('user_id'))
-                ->where('user_follower_id',$request->get('user_follower_id'))->delete();
+        $unfollow_this_user = User::where('id',$request->get('user_id'))->get();
 
-        return json_encode(['Sucess'=>'Unfollowed']);
+        auth()->user()->following()->detach($unfollow_this_user);
+
+        return json_encode(['Success'=>'Unfollowed']);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ShareController extends Controller
@@ -11,9 +12,20 @@ class ShareController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+
+
+        if(strlen($request->get('user')) > 0){
+            $users = auth()->user()->following->filter(function ($user) use ($request) {
+                return false !== stripos($user->username,$request->get('user'));
+            });
+        }
+        else{
+            $users = collect([]);
+        }
+
+        return view('partials._share',compact('users'));
     }
 
     /**

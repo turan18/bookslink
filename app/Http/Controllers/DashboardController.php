@@ -3,24 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Validation\Rule;
 
-class UserController extends Controller
+class DashboardController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-
     public function index()
     {
-        $users = User::with('followers')->where('username','like','%' . request()->get('username') . '%')->get();
 
-        return view('partials._users',compact('users'));
+        $user = auth()->user();
+
+        return view('dashboard',compact('user'));
     }
 
     /**
@@ -41,15 +38,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $user = User::create($request->validateWithBag('register',[
-            'username' => ['required','max:255','min:3',Rule::unique('users','username')],
-            'email' => ['required','email','max:255',Rule::unique('users','email')],
-            'password' => ['required','max:255','min:5']
-        ]));
-
-        auth()->login($user);
-
-        return back()->with('success','Your account has been created.');
+        //
     }
 
     /**

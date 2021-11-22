@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Follower extends Model
+class Follow extends Model
 {
     use HasFactory;
 
-    const CREATED_AT = 'followed_at';
 
+    const CREATED_AT = 'followed_at';
 
 }

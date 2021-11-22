@@ -8,10 +8,11 @@
                             <div class="flex justify-center mt-2">
                                 @auth()
                                     @unless(auth()->user()->id == $user->id)
-                                        @if(auth()->user()->following->contains('user_id',$user->id))
-                                            <button id="unfollow_button" class="p-1 bg-red-500 text-white text-sm rounded-lg" onclick="unfollowUser({{auth()->user()->id}},{{$user->id}})">Unfollow</button>
+
+                                        @if($user->followers->contains('id',auth()->user()->id))
+                                            <button id="unfollow_button" class="p-1 bg-red-500 text-white text-sm rounded-lg" onclick="unfollowUser({{$user->id}})">Unfollow</button>
                                         @else
-                                            <button id="follow_button" class="p-1 bg-blue-500 text-white text-sm rounded-lg" onclick="followUser({{auth()->user()->id}},{{$user->id}})">Follow</button>
+                                            <button id="follow_button" class="p-1 bg-blue-500 text-white text-sm rounded-lg" onclick="followUser({{$user->id}})">Follow</button>
                                         @endif
                                     @endunless
                                 @else

@@ -43,12 +43,7 @@ class ReviewsController extends Controller
 
         $sum = Review::where('book_id',$book->id)->sum('rating');
         $count = Review::where('book_id',$book->id)->count() + 1;
-
-
         $new_avg = floor(($sum + (int) $request->get('rating')) / $count);
-
-
-
         $book->update(['full_rating' => $new_avg]);
 
 

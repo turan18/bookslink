@@ -21,13 +21,18 @@
         <a href="/" class="text-white text-5xl font-salsa">Bookslink</a>
         <div class="flex">
             <nav class="flex font-aleg text-md space-x-16 px-12 py-3 rounded-xl bg-light-purple text-white text-lg">
-                <a href="/">{{auth()->user()->username}}'s Profile</a>
-                <button>Dashboard</button>
-                <button>Notifications</button>
-                <form method="POST" action="/logout">
-                    @csrf
-                    <button type="submit">Logout</button>
-                </form>
+                <button><i class="fas fa-bell"></i></button>
+                <div class="flex items-center">
+                    <a href="/dashboard">Dashboard</a>
+
+                </div>
+                <div>
+                    <form method="POST" action="/logout" class="h-full flex">
+                        @csrf
+                        <button type="submit">Logout</button>
+                    </form>
+                </div>
+
             </nav>
         </div>
     </div>

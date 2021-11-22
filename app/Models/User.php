@@ -18,6 +18,10 @@ class User extends Authenticatable
      *
      * @var string[]
      */
+
+
+//    protected $with = ['followers','following','favorite_books','shared_books'];
+
     protected $fillable = [
         'username',
         'email',
@@ -35,7 +39,7 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    # Eloquent mutator that receives password and encrypts it
+    # Eloquent mutator that receives password and hashes it
     public function setPasswordAttribute($password){
         $this->attributes['password'] = bcrypt($password);
     }
@@ -58,10 +62,16 @@ class User extends Authenticatable
     }
 
     public function followers(){
-        return $this->hasMany(Follower::class);
+//        return $this->hasMany(Follow::class);
+        return $this->belongsToMany(User::class, 'follows', 'user_id', 'user_follower_id');
+
     }
 
     public function following(){
-        return $this->hasMany(Follower::class,'user_follower_id');
+/*        return $this->hasMany(Follow::class,'user_follower_id');*/
+        return $this->belongsToMany(User::class, 'follows', 'user_follower_id', 'user_id');
+
     }
+
+
 }

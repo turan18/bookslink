@@ -31,7 +31,7 @@ class SearchItemsController extends Controller
             $reviews = null;
         }
         else{
-            $reviews = $item->reviews()->with('user')->paginate(5)->withQueryString();
+            $reviews = $item->reviews()->with('user')->orderBy('created_at','desc')->paginate(3)->withQueryString();
 
         }
         return view('book',compact('item','reviews'));

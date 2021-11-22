@@ -12,6 +12,23 @@
 <x-main.navbar></x-main.navbar>
 
 
+<div class="absolute top-1/5 left-1/4 right-1/4 text-white hidden" id="share-search">
+
+    <div class="p-4 text-black font-salsa">
+        <div class="flex flex-col w-full items-center">
+            <div class="w-2/3 relative">
+                <input type="text" class="w-full rounded-sm h-10 px-2 font-bold" placeholder="Search through friends to share with..." id="search-share-bar">
+                <span class="absolute right-2 top-1/3">
+                    <i class="fas fa-search fa-1x"></i>
+                </span>
+            </div>
+            <div id="friends-list" class="flex flex-col rounded-bl-lg rounded-br-lg bg-white w-2/3">
+
+            </div>
+        </div>
+
+    </div>
+</div>
 
 <section class="mt-16 bg-background-1">
 
@@ -170,9 +187,9 @@
             </div>
             <div class="flex justify-end mt-8">
                 <div class="flex w-1/4 justify-end text-white gap-x-4">
-                    <button class="bg-blue-800 font-salsa rounded-lg p-2 w-1/3">Read</button>
-                    <button class="bg-blue-800 font-salsa rounded-lg p-2 w-1/3">Share</button>
-                    <a class="bg-blue-800 font-salsa rounded-lg p-2 w-1/3 text-center" href="{{$item['link']}}">Preview</a>
+                    <button class="bg-blue-800 hover:bg-blue-500 font-salsa rounded-lg p-2 w-1/3">Read</button>
+                    <button class="bg-blue-800 hover:bg-blue-500 font-salsa rounded-lg p-2 w-1/3" onclick="shareSearch()">Share</button>
+                    <a class="bg-blue-800 hover:bg-blue-500 font-salsa rounded-lg p-2 w-1/3 text-center" href="{{$item['link']}}">Preview</a>
                 </div>
             </div>
 
@@ -257,10 +274,10 @@
                         <div class="flex justify-center mt-2">
                             @auth()
                                 @unless(auth()->user()->id == $review->user->id)
-                                    @if(auth()->user()->following->contains('user_id',$review->user->id))
-                                        <button id="unfollow_button" class="p-1 bg-red-500 text-white text-sm rounded-lg" onclick="unfollowUser({{auth()->user()->id}},{{$review->user->id}})">Unfollow</button>
+                                    @if($review->user->followers->contains('id',auth()->user()->id))
+                                        <button id="unfollow_button" class="p-1 bg-red-500 text-white text-sm rounded-lg" onclick="unfollowUser({{$review->user->id}})">Unfollow</button>
                                     @else
-                                        <button id="follow_button" class="p-1 bg-blue-500 text-white text-sm rounded-lg" onclick="followUser({{auth()->user()->id}},{{$review->user->id}})">Follow</button>
+                                        <button id="follow_button" class="p-1 bg-blue-500 text-white text-sm rounded-lg" onclick="followUser({{$review->user->id}})">Follow</button>
                                     @endif
                                 @endunless
                             @endauth
@@ -317,6 +334,7 @@
 
 
 
+
 <x-main.flash></x-main.flash>
 
 
@@ -326,7 +344,25 @@
     const show_less_button = document.querySelector('#show_less_button');
     const show_more = document.querySelector('#more-content');
     const show_less = document.querySelector('#less-content');
+    const search_container = document.querySelector('#share-search');
+    const search_bar = document.querySelector('#search-share-bar');
+    const search_results = document.querySelector('#friends-list');
 
+    let search_toggle = false;
+
+    search_bar.addEventListener('keyup',function (e){
+        if(e.key === "Escape" && search_toggle){
+            search_bar.focus();
+            search_toggle = false;
+            search_container.classList.add('hidden')
+
+        }
+        else if(search_toggle){
+            fetch(`/partials/share?user=${search_bar.value}`)
+            .then(response=>response.text())
+            .then(html=>search_results.innerHTML = html);
+        }
+    });
 
     function showMore(){
 
@@ -345,12 +381,12 @@
         show_less_button.classList.add('hidden');
 
     }
-    function followUser(follower,user){
+    function followUser(user){
         const follow_button = document.querySelector('#follow_button');
         follow_button.textContent = 'Unfollow';
         follow_button.classList.remove('bg-blue-500');
         follow_button.classList.add('bg-red-500');
-        follow_button.setAttribute('onclick',`unfollowUser(${follower},${user})`);
+        follow_button.setAttribute('onclick',`unfollowUser(${user})`);
         follow_button.id = 'unfollow_button';
 
 
@@ -362,7 +398,6 @@
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
             },
             body: JSON.stringify({
-                user_follower_id: follower,
                 user_id: user
 
             })
@@ -372,12 +407,12 @@
     }
 
 
-    function unfollowUser(follower,user){
+    function unfollowUser(user){
         const unfollow_button = document.querySelector('#unfollow_button');
         unfollow_button.textContent = 'Follow';
         unfollow_button.classList.remove('bg-red-500');
         unfollow_button.classList.add('bg-blue-500');
-        unfollow_button.setAttribute('onclick',`followUser(${follower},${user})`);
+        unfollow_button.setAttribute('onclick',`followUser(${user})`);
         unfollow_button.id = 'follow_button';
 
 
@@ -389,13 +424,26 @@
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
             },
             body: JSON.stringify({
-                user_follower_id: follower,
                 user_id: user
 
             })
         }).then((response) => response.json()).then((data) => {console.log('Success',data)})
     }
 
+    function shareSearch(){
+
+        if(!search_toggle){
+            search_container.classList.remove('hidden');
+            search_bar.focus();
+            search_toggle = true;
+
+        }
+        else{
+            search_container.classList.add('hidden')
+            search_toggle = false;
+        }
+
+    }
 </script>
 </body>
 </html>

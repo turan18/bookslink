@@ -50,12 +50,12 @@
                 document.querySelector('#load').style.display = "none";
             });
     }
-    function followUser(follower,user){
+    function followUser(user){
         const follow_button = document.querySelector('#follow_button');
         follow_button.textContent = 'Unfollow';
         follow_button.classList.remove('bg-blue-500');
         follow_button.classList.add('bg-red-500');
-        follow_button.setAttribute('onclick',`unfollowUser(${follower},${user})`);
+        follow_button.setAttribute('onclick',`unfollowUser(${user})`);
         follow_button.id = 'unfollow_button';
 
 
@@ -67,7 +67,6 @@
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
             },
             body: JSON.stringify({
-                user_follower_id: follower,
                 user_id: user
 
             })
@@ -77,12 +76,12 @@
     }
 
 
-    function unfollowUser(follower,user){
+    function unfollowUser(user){
         const unfollow_button = document.querySelector('#unfollow_button');
         unfollow_button.textContent = 'Follow';
         unfollow_button.classList.remove('bg-red-500');
         unfollow_button.classList.add('bg-blue-500');
-        unfollow_button.setAttribute('onclick',`followUser(${follower},${user})`);
+        unfollow_button.setAttribute('onclick',`followUser(${user})`);
         unfollow_button.id = 'follow_button';
 
 
@@ -94,7 +93,6 @@
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
             },
             body: JSON.stringify({
-                user_follower_id: follower,
                 user_id: user
 
             })
