@@ -50,13 +50,13 @@
                 document.querySelector('#load').style.display = "none";
             });
     }
-    function followUser(user){
-        const follow_button = document.querySelector('#follow_button');
+    function followUser(user,button_index){
+        const follow_button = document.querySelector(`#follow_button-${button_index}`);
         follow_button.textContent = 'Unfollow';
         follow_button.classList.remove('bg-blue-500');
         follow_button.classList.add('bg-red-500');
-        follow_button.setAttribute('onclick',`unfollowUser(${user})`);
-        follow_button.id = 'unfollow_button';
+        follow_button.setAttribute('onclick',`unfollowUser(${user},${button_index})`);
+        follow_button.id = `unfollow_button-${button_index}`;
 
 
         fetch('/follow',{
@@ -76,13 +76,13 @@
     }
 
 
-    function unfollowUser(user){
-        const unfollow_button = document.querySelector('#unfollow_button');
+    function unfollowUser(user,button_index){
+        const unfollow_button = document.querySelector(`#unfollow_button-${button_index}`);
         unfollow_button.textContent = 'Follow';
         unfollow_button.classList.remove('bg-red-500');
         unfollow_button.classList.add('bg-blue-500');
-        unfollow_button.setAttribute('onclick',`followUser(${user})`);
-        unfollow_button.id = 'follow_button';
+        unfollow_button.setAttribute('onclick',`followUser(${user},${button_index})`);
+        unfollow_button.id = `follow_button-${button_index}`;
 
 
         fetch('/unfollow',{

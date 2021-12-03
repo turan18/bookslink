@@ -57,8 +57,12 @@ class User extends Authenticatable
         return $this->hasMany(FavoritedBook::class);
     }
 
-    public function shared_books(){
+    public function shares(){
         return $this->hasMany(SharedBook::class);
+    }
+
+    public function shared_with(){
+        return $this->hasMany(SharedBook::class,'shared_with_user_id');
     }
 
     public function followers(){

@@ -7,14 +7,22 @@ module.exports = {
             'background-1': '#09003F',
             'light-purple': '#4423CA',
             'overlay': '#190945',
-            'search-bg': '#24254A'
+            'search-bg': '#24254A',
+            'dash': '#181A62'
+        },
+        margin: {
+          'half':'50%',
         },
         fontFamily:{
             'salsa': ['Salsa', 'cursive'],
             'aleg' : ['Alegreya', 'serif']
         },
         width:{
-            "sm-book-w": "128px"
+            'sm-book-w': '128px',
+            'sidebar' : '12%',
+            'big-sidebar' : '14%',
+            'follow-lg' : '38%'
+
         },
         height:{
             "more-half-view": "51vh",

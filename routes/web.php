@@ -37,8 +37,21 @@ Route::get('dashboard',[DashboardController::class,'index'])->middleware('auth')
 Route::get('partials/user',[UserController::class,'index'])->name('users');
 Route::get('partials/books',[LoadMore::class,'index']);
 Route::get('partials/share',[ShareController::class,'index'])->middleware('auth');
+Route::get('partials/recommend',[DashboardController::class,'show'])->middleware('auth')->name('recommended');
 
 Route::post('favorite-item',[FavoritesController::class,'store'])->middleware('auth')->name('add_to_favorites');
+Route::post('unfavorite-item',[FavoritesController::class,'destroy'])->middleware('auth')->name('remove_from_favorites');
+
 Route::post('review',[ReviewsController::class,'store'])->middleware('auth');
 Route::post('follow',[FollowController::class,'store'])->middleware('auth');
 Route::post('unfollow',[FollowController::class,'destroy'])->middleware('auth');
+
+
+Route::get('profile',[DashboardController::class,'profile'])->middleware('auth');
+Route::get('favorites',[DashboardController::class,'favorites'])->middleware('auth');
+Route::get('shared',[DashboardController::class,'shared'])->middleware('auth');
+Route::get('followers',[DashboardController::class,'followers'])->middleware('auth');
+Route::get('following',[DashboardController::class,'following'])->middleware('auth');
+
+
+Route::post('share',[ShareController::class,'store'])->middleware('auth');

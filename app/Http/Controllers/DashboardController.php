@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Services\BookCollector;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -18,6 +19,28 @@ class DashboardController extends Controller
         $user = auth()->user();
 
         return view('dashboard',compact('user'));
+    }
+
+    public function profile(){
+        $user = auth()->user();
+        return view('dashboard.profile',compact('user'));
+
+    }
+    public function shared(){
+        $user = auth()->user();
+        return view('dashboard.shared',compact('user'));
+    }
+    public function favorites(){
+        $user = auth()->user();
+        return view('dashboard.favorites',compact('user'));
+    }
+    public function followers(){
+        $user = auth()->user();
+        return view('dashboard.followers',compact('user'));
+    }
+    public function following(){
+        $user = auth()->user();
+        return view('dashboard.following',compact('user'));
     }
 
     /**
@@ -47,9 +70,17 @@ class DashboardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(BookCollector $bookCollector)
     {
-        //
+        $recommended_books = null;
+        $current_books = auth()->user()->favorite_books->sortByDesc('created_at')->take(5)->values()->map(function ($book){
+           return explode(' ', trim($book->info->title))[0];
+        });
+        if($current_books->count() > 0){
+            $recommended_books = $bookCollector->retrieveRecommended(implode($current_books->toArray(),'+'));
+        }
+        return view('partials._recommended',compact('recommended_books'));
+
     }
 
     /**

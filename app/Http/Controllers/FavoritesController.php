@@ -52,7 +52,6 @@ class FavoritesController extends Controller
         }
         else{
             FavoritedBook::create(['user_id' => auth()->user()->id,'book_id' => $db_book->id]);
-//            $message = "'" . $db_book->title . "'" . ' was added to your favorites';
         }
         return back()->with(['success' => "'" . $db_book->title . "'" . ' was added to your favorites']);
     }
@@ -97,8 +96,10 @@ class FavoritesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy()
     {
-        //
+        FavoritedBook::find(request()->get('book_id'))->delete();
+
+        return response()->json('Sucess');
     }
 }

@@ -33,3 +33,32 @@
 .rating > input.btn:checked ~ label:before {
     color: red;
 }
+
+.slideup{
+    animation-duration: .5s;
+    animation-name: slideup;
+}
+@keyframes slideup {
+    from {
+        height: 7rem;
+    }
+
+    to {
+        height: 0;
+    }
+}
+
+.slidedown{
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-name: slidedown;
+}
+@keyframes slidedown {
+    from {
+        height: 0;
+    }
+
+    to {
+        height: 7rem;
+    }
+}

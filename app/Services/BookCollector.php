@@ -23,4 +23,8 @@ class BookCollector
     public function retrieveSpecific(string $id){
         return BookDataMapper::forSingleVolumeKeys($this->client->volumes->get($id));
     }
+
+    public function retrieveRecommended(string $books,$filters = ['maxResults'=>'10']){
+        return BookDataMapper::forRecommendations($this->client->volumes->listVolumes($books,$filters));
+    }
 }

@@ -22,9 +22,37 @@
                     <i class="fas fa-search fa-1x"></i>
                 </span>
             </div>
-            <div id="friends-list" class="flex flex-col rounded-bl-lg rounded-br-lg bg-white w-2/3">
+            <form method="POST" action="/share" class="flex flex-col rounded-bl-lg rounded-br-lg bg-white w-2/3">
+                @csrf
+                <div id="friends-list">
 
-            </div>
+                </div>
+
+                @if(is_object($item))
+                    <input type="hidden" name="id" value="{{$item['id']}}">
+
+                @else
+                    <input type="hidden" name="volume_id" value="{{$item['volume_id']}}">
+                    <input type="hidden" name="title" value="{{urldecode($item['title']) ?? null}}">
+                    <input type="hidden" name="authors" value="{{$item['authors'] ?? null}}">
+                    <input type="hidden" name="categories" value="{{$item['categories'] ?? null}}">
+                    <input type="hidden" name="isbn_13" value="{{$item['isbn_13'] ?? null}}">
+                    <input type="hidden" name="publisher" value="{{$item['publisher'] ?? null}}">
+                    <input type="hidden" name="publication_date" value="{{$item['publication_date'] ?? null}}">
+                    <input type="hidden" name="page_count" value="{{$item['page_count'] ?? null}}">
+                    <input type="hidden" name="description" value="{{$item['description'] ?? null}}">
+                    <input type="hidden" name="thumbnail" value="{{$item['large-thumbnail'] ?? $item['thumbnail']}}">
+                    <input type="hidden" name="link" value="{{$item['link']}}">
+                @endif
+
+
+
+
+
+
+            </form>
+
+
         </div>
 
     </div>
@@ -36,8 +64,8 @@
 
         <div class="flex flex-col mt-8 w-1/5 text-white self-start">
 
-            <div class="flex justify-center h-5/6 max-h-5/6 pb-2">
-                <img src="{{$item['large-thumbnail'] ?? $item['thumbnail'] }}}}" class="max-h-full rounded-lg bg-cover" alt="Thumbnail">
+            <div class="flex justify-center pb-2">
+                <img src="{{$item['large-thumbnail'] ?? $item['thumbnail'] }}}}" class="w-full h-full rounded-lg bg-cover" alt="Thumbnail">
             </div>
             <div class="flex justify-center pb-2">
                 <div class="flex stars-container">
@@ -264,7 +292,7 @@
 
 
         </div>
-        <div class="flex flex-col text-lg w-2/6 gap-y-12 mt-12 ml-10">
+        <div class="flex flex-col text-lg w-1/4 gap-y-12 mt-12 ml-10">
             @foreach ($reviews as $review)
                 <div class="flex gap-x-2 w-full pl-2 pr-4 py-2 bg-gray-200 rounded-lg">
                     <div class="w-1/5 self-center py-4">
@@ -275,9 +303,9 @@
                             @auth()
                                 @unless(auth()->user()->id == $review->user->id)
                                     @if($review->user->followers->contains('id',auth()->user()->id))
-                                        <button id="unfollow_button" class="p-1 bg-red-500 text-white text-sm rounded-lg" onclick="unfollowUser({{$review->user->id}})">Unfollow</button>
+                                        <button id="unfollow_button-{{$loop->index}}" class="p-1 bg-red-500 text-white text-sm rounded-lg" onclick="unfollowUser({{$review->user->id}},{{$loop->index}})">Unfollow</button>
                                     @else
-                                        <button id="follow_button" class="p-1 bg-blue-500 text-white text-sm rounded-lg" onclick="followUser({{$review->user->id}})">Follow</button>
+                                        <button id="follow_button-{{$loop->index}}" class="p-1 bg-blue-500 text-white text-sm rounded-lg" onclick="followUser({{$review->user->id}},{{$loop->index}})">Follow</button>
                                     @endif
                                 @endunless
                             @endauth
@@ -337,7 +365,6 @@
 
 <x-main.flash></x-main.flash>
 
-
 <script>
     const ellipses = document.querySelector('#ellipses');
     const show_more_button = document.querySelector('#show_more_button');
@@ -358,11 +385,28 @@
 
         }
         else if(search_toggle){
-            fetch(`/partials/share?user=${search_bar.value}`)
-            .then(response=>response.text())
-            .then(html=>search_results.innerHTML = html);
+            fetch(`/partials/share?user=${search_bar.value}`, {headers: { 'Accept': 'application/json' }})
+                .then(response=>{
+                    if(response.ok){
+                        return response.text()
+                    }
+                    else if(response.status === 404){
+                        return Promise.reject('User not found.');
+                    }
+                    else{
+                        return Promise.reject(response.status)
+                    }
+                })
+            .then(html=> search_results.innerHTML = html + "<div class=\"flex justify-center my-4\"><button class=\"px-4 py-1 text-white bg-blue-500 rounded-lg\" type=\"submit\">Share</button></div>")
+            .catch(error=>{
+                search_results.innerHTML = "<p class=\"text-center p-5\">No results found...</p>";
+            })
         }
     });
+
+    //if response.ok = html + "<div class=\"flex justify-center my-4\"><button class=\"px-4 py-1 text-white bg-blue-500 rounded-lg\" type=\"submit\">Share</button></div>"
+    //else thing = <p class="text-center p-5">No results found...</p>
+
 
     function showMore(){
 
@@ -381,13 +425,13 @@
         show_less_button.classList.add('hidden');
 
     }
-    function followUser(user){
-        const follow_button = document.querySelector('#follow_button');
+    function followUser(user,button_index){
+        const follow_button = document.querySelector(`#follow_button-${button_index}`);
         follow_button.textContent = 'Unfollow';
         follow_button.classList.remove('bg-blue-500');
         follow_button.classList.add('bg-red-500');
-        follow_button.setAttribute('onclick',`unfollowUser(${user})`);
-        follow_button.id = 'unfollow_button';
+        follow_button.setAttribute('onclick',`unfollowUser(${user},${button_index})`);
+        follow_button.id = `unfollow_button-${button_index}`;
 
 
         fetch('/follow',{
@@ -407,13 +451,13 @@
     }
 
 
-    function unfollowUser(user){
-        const unfollow_button = document.querySelector('#unfollow_button');
+    function unfollowUser(user,button_index){
+        const unfollow_button = document.querySelector(`#unfollow_button-${button_index}`);
         unfollow_button.textContent = 'Follow';
         unfollow_button.classList.remove('bg-red-500');
         unfollow_button.classList.add('bg-blue-500');
-        unfollow_button.setAttribute('onclick',`followUser(${user})`);
-        unfollow_button.id = 'follow_button';
+        unfollow_button.setAttribute('onclick',`followUser(${user},${button_index})`);
+        unfollow_button.id = `follow_button-${button_index}`;
 
 
         fetch('/unfollow',{
@@ -442,8 +486,32 @@
             search_container.classList.add('hidden')
             search_toggle = false;
         }
+    }
+
+    function share(id){
+        if (document.readyState === 'complete' && event.target.type !== 'checkbox') {
+            const message = document.querySelector(`#${id}`).nextElementSibling;
+            const node = document.querySelectorAll('.slidedown')[0];
+
+            if(node === undefined){
+                message.classList.add('slidedown');
+            }
+            else{
+                node.classList.remove('slidedown');
+                node.classList.add('slideup');
+                if(node.previousElementSibling.id !== id){
+                    setTimeout(()=>{
+                        message.classList.add('slidedown');
+                    },500)
+                }
+
+            }
+        }
+
+
 
     }
 </script>
+
 </body>
 </html>

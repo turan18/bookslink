@@ -57,7 +57,21 @@ class BookDataMapper
 
     }
 
+    public static function forRecommendations($arr) :array{
+        collect($arr->getItems())->map(function ($arr){
 
+            static::$volumes[] = ([
+                'volume_id' => $arr['id'] ?? null,
+                'thumbnail' => $arr['volumeInfo']['imageLinks']['thumbnail'] ?? null,
+                'large-thumbnail' => $arr['volumeInfo']['imageLinks']['large'] ?? null,
+                'title' => $arr['volumeInfo']['title'] ?? null
+            ]);
+        });
+        if(count($arr) == 0){
+            return [];
+        }
+        return static::$volumes;
+    }
 
     private static function sanitizeVolumes(array $books,array $db_books): array
     {

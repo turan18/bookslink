@@ -10,9 +10,9 @@
                                     @unless(auth()->user()->id == $user->id)
 
                                         @if($user->followers->contains('id',auth()->user()->id))
-                                            <button id="unfollow_button" class="p-1 bg-red-500 text-white text-sm rounded-lg" onclick="unfollowUser({{$user->id}})">Unfollow</button>
+                                            <button id="unfollow_button-{{$loop->index}}" class="p-1 bg-red-500 text-white text-sm rounded-lg" onclick="unfollowUser({{$user->id}},{{$loop->index}})">Unfollow</button>
                                         @else
-                                            <button id="follow_button" class="p-1 bg-blue-500 text-white text-sm rounded-lg" onclick="followUser({{$user->id}})">Follow</button>
+                                            <button id="follow_button-{{$loop->index}}" class="p-1 bg-blue-500 text-white text-sm rounded-lg" onclick="followUser({{$user->id}},{{$loop->index}})">Follow</button>
                                         @endif
                                     @endunless
                                 @else
