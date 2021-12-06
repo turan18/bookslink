@@ -2,7 +2,14 @@
 <head>
     <x-main.head></x-main.head>
     <title>Search</title>
-    <link href="{{asset('css/rating.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{asset('css/book.css')}}" rel="stylesheet" type="text/css">
+    <script>
+        const requestItem = '{{request()->get('item')}}';
+    </script>
+    <script type="text/javascript" src="{{asset('js/fetchBooks.js')}}" defer></script>
+    <script type="text/javascript" src="{{asset('js/fetchUsers.js')}}" defer></script>
+    <script type="text/javascript" src="{{asset('js/friend.js')}}" defer></script>
+
 </head>
 
 
@@ -18,90 +25,9 @@
 <x-main.search.filter></x-main.search.filter>
 <x-main.search.results :items="$items"></x-main.search.results>
 
-<script>
-    let count = 0;
-    function fetchBooks(){
-        fetch(`/partials/books?item={{request()->get('item')}}&index=${count}`)
-            .then(response=>response.text())
-            .then(html=>{
-                document.querySelector('#items-container').innerHTML = html;
-                document.querySelector('#book_link').classList.add('bg-light-purple');
-                document.querySelector('#usr_link').classList.remove('bg-light-purple');
-                document.querySelector('#load').style.display = "flex";
-            });
-    }
-
-    function loadBooks(){
-        count+=11
-        fetch(`/partials/books?item={{request()->get('item')}}&index=${count}`)
-            .then(response=>response.text())
-            .then(html=>{
-                document.querySelector('#items-container').innerHTML = document.querySelector('#items-container').innerHTML + html;
-            });
-    }
-
-    function fetchUsers(){
-        fetch(`/partials/user?username={{request()->get('item')}}`)
-            .then(response=>response.text())
-            .then(html=>{
-                document.querySelector('#items-container').innerHTML = html;
-                document.querySelector('#usr_link').classList.add('bg-light-purple');
-                document.querySelector('#book_link').classList.remove('bg-light-purple');
-                document.querySelector('#load').style.display = "none";
-            });
-    }
-    function followUser(user,button_index){
-        const follow_button = document.querySelector(`#follow_button-${button_index}`);
-        follow_button.textContent = 'Unfollow';
-        follow_button.classList.remove('bg-blue-500');
-        follow_button.classList.add('bg-red-500');
-        follow_button.setAttribute('onclick',`unfollowUser(${user},${button_index})`);
-        follow_button.id = `unfollow_button-${button_index}`;
-
-
-        fetch('/follow',{
-            method: "post",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            },
-            body: JSON.stringify({
-                user_id: user
-
-            })
-        }).then((response) => response.json()).then((data) => {console.log('Success',data)})
-
-
-    }
-
-
-    function unfollowUser(user,button_index){
-        const unfollow_button = document.querySelector(`#unfollow_button-${button_index}`);
-        unfollow_button.textContent = 'Follow';
-        unfollow_button.classList.remove('bg-red-500');
-        unfollow_button.classList.add('bg-blue-500');
-        unfollow_button.setAttribute('onclick',`followUser(${user},${button_index})`);
-        unfollow_button.id = `follow_button-${button_index}`;
-
-
-        fetch('/unfollow',{
-            method: "post",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            },
-            body: JSON.stringify({
-                user_id: user
-
-            })
-        }).then((response) => response.json()).then((data) => {console.log('Success',data)})
-    }
 
 
 
-</script>
 
 
 

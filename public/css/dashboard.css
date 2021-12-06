@@ -1,3 +1,14 @@
-#container:hover #wrapper,#container:hover #read_link{
+#container:hover #wrapper,#container:hover .view{
     display: block;
+}
+
+input[type="file"] {
+    display: none;
+}
+.file-button{
+    background-color: rgba(59, 130, 246, 1);
+    display: inline-block;
+    border-radius: 0.5rem;
+    padding: 0.25rem;
+    cursor: pointer;
 }

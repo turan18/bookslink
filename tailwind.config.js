@@ -21,7 +21,8 @@ module.exports = {
             'sm-book-w': '128px',
             'sidebar' : '12%',
             'big-sidebar' : '14%',
-            'follow-lg' : '38%'
+            'follow-lg' : '38%',
+            'review': '30%'
 
         },
         height:{
@@ -30,6 +31,10 @@ module.exports = {
             "screen/3": "calc(100vh / 3)",
             "screen/4": "calc(100vh / 4)",
             "screen/5": "calc(100vh / 5)",
+            "screen/6": "calc(100vh / 6)",
+            "screen/7": "calc(100vh / 7)",
+            "screen/8": "calc(100vh / 8)",
+
             "sm-book-h": "198px"
         },
         backgroundImage:{

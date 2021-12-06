@@ -15,32 +15,30 @@ class DashboardController extends Controller
      */
     public function index()
     {
-
         $user = auth()->user();
-
         return view('dashboard',compact('user'));
     }
 
     public function profile(){
         $user = auth()->user();
-        return view('dashboard.profile',compact('user'));
+        return view('components.dashboard.content.profile',compact('user'));
 
     }
     public function shared(){
         $user = auth()->user();
-        return view('dashboard.shared',compact('user'));
+        return view('components.dashboard.content.shared',compact('user'));
     }
     public function favorites(){
         $user = auth()->user();
-        return view('dashboard.favorites',compact('user'));
+        return view('components.dashboard.content.favorites',compact('user'));
     }
     public function followers(){
         $user = auth()->user();
-        return view('dashboard.followers',compact('user'));
+        return view('components.dashboard.content.followers',compact('user'));
     }
     public function following(){
         $user = auth()->user();
-        return view('dashboard.following',compact('user'));
+        return view('components.dashboard.content.following',compact('user'));
     }
 
     /**

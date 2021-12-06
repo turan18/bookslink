@@ -81,9 +81,36 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $user = auth()->user();
+
+        if($request->has('avatar')){
+            $request->validate([
+                'avatar' => ['required','image','different:$user->avatar']
+            ]);
+            $path = $request->file('avatar')->store('avatars');
+            $user->avatar = $path;
+            $user->save();
+            return response()->json($path);
+
+        }
+        elseif ($request->has('about_me')){
+//            $request->validate([
+//                'about_me' => ['required']
+//            ]);
+
+            $user->about_me = $request->get('about_me');
+            $user->save();
+
+            return response()->json($request->get('about_me'));
+
+
+
+
+
+
+        }
     }
 
     /**

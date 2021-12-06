@@ -41,6 +41,7 @@ Route::get('partials/recommend',[DashboardController::class,'show'])->middleware
 
 Route::post('favorite-item',[FavoritesController::class,'store'])->middleware('auth')->name('add_to_favorites');
 Route::post('unfavorite-item',[FavoritesController::class,'destroy'])->middleware('auth')->name('remove_from_favorites');
+Route::post('share',[ShareController::class,'store'])->middleware('auth');
 
 Route::post('review',[ReviewsController::class,'store'])->middleware('auth');
 Route::post('follow',[FollowController::class,'store'])->middleware('auth');
@@ -53,5 +54,5 @@ Route::get('shared',[DashboardController::class,'shared'])->middleware('auth');
 Route::get('followers',[DashboardController::class,'followers'])->middleware('auth');
 Route::get('following',[DashboardController::class,'following'])->middleware('auth');
 
-
-Route::post('share',[ShareController::class,'store'])->middleware('auth');
+Route::post('avatar',[UserController::class,'update'])->middleware('auth');
+Route::post('aboutme',[UserController::class,'update'])->middleware('auth');
