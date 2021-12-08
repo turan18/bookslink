@@ -67,13 +67,13 @@ class User extends Authenticatable
 
     public function followers(){
 //        return $this->hasMany(Follow::class);
-        return $this->belongsToMany(User::class, 'follows', 'user_id', 'user_follower_id');
+        return $this->belongsToMany(User::class, 'follows', 'user_id', 'user_follower_id')->withPivot('id');
 
     }
 
     public function following(){
 /*        return $this->hasMany(Follow::class,'user_follower_id');*/
-        return $this->belongsToMany(User::class, 'follows', 'user_follower_id', 'user_id');
+        return $this->belongsToMany(User::class, 'follows', 'user_follower_id', 'user_id')->withPivot('id');
 
     }
 

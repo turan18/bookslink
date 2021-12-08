@@ -16,8 +16,8 @@ class CreateSharedBooksTable extends Migration
         Schema::create('shared_books', function (Blueprint $table) {
             $table->id();
             $table->foreignId('book_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('shared_with_user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->text('message')->nullable();
             $table->timestamps();
         });

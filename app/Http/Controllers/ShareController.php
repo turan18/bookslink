@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SharedWith;
 use App\Models\Book;
 use App\Models\SharedBook;
 use App\Models\User;
@@ -62,28 +63,38 @@ class ShareController extends Controller
             );
             collect($request->get('share'))->each(function ($relation) use ($book) {
                 if(isset($relation['person'])){
-                    SharedBook::create([
+                    $share = SharedBook::create([
                         'book_id' => $book->id,
                         'user_id' => auth()->user()->id,
                         'shared_with_user_id' => $relation['person'],
                         'message' => $relation['message']
                     ]);
+                    SharedWith::dispatch($share);
+
                 }
 
             });
+
         }
         else{
             collect($request->get('share'))->each(function ($relation) use ($id) {
                 if(isset($relation['person'])) {
-                    SharedBook::create([
+                    $share = SharedBook::create([
                         'book_id' => $id,
                         'user_id' => auth()->user()->id,
                         'shared_with_user_id' => $relation['person'],
                         'message' => $relation['message']
                     ]);
+                    SharedWith::dispatch($share);
+
                 }
             });
+
         }
+
+        //Trigger an event
+
+
         return back()->with(['success'=>'Sucessfully shared.']);
     }
 

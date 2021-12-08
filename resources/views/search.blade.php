@@ -9,6 +9,8 @@
     <script type="text/javascript" src="{{asset('js/fetchBooks.js')}}" defer></script>
     <script type="text/javascript" src="{{asset('js/fetchUsers.js')}}" defer></script>
     <script type="text/javascript" src="{{asset('js/friend.js')}}" defer></script>
+    <script type="text/javascript" src="{{asset('js/notifications.js')}}" defer></script>
+
 
 </head>
 

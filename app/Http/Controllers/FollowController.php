@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\Followed;
 use App\Models\Follow;
 
 use App\Models\User;
@@ -47,6 +48,12 @@ class FollowController extends Controller
         $follow_this_user = User::where('id',$request->get('user_id'))->get();
         auth()->user()->following()->attach($follow_this_user,['followed_at'=>now(),'updated_at'=>now()]);
 
+        $follow = Follow::find(auth()->user()->following()->wherePivot('user_id',$request->get('user_id'))->first()->pivot->id);
+
+
+        //Trigger an event
+
+        Followed::dispatch($follow);
 
         return response()->json(['Success'=>'Followed'],200);
     }
