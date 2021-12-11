@@ -1,9 +1,8 @@
-<section class="mt-16 bg-background-1">
+<section class="mt-16 bg-background-1 flex justify-center">
 
-    <div class="flex mx-48 gap-x-12">
+    <div class="flex flex-col lg:flex-row md:flex-row w-full lg:w-5/6 md:w-5/6 gap-x-12">
 
-        <div class="flex flex-col mt-8 w-1/5 text-white self-start">
-
+        <div class="flex flex-col mt-8 w-1/2 lg:w-1/5 md:w-1/5 text-white self-center lg:self-start md:self-start">
             <div class="flex justify-center pb-2">
                 <img src="{{$item['large-thumbnail'] ?? $item['thumbnail'] }}}}" class="w-full h-full rounded-lg bg-cover" alt="Thumbnail">
             </div>
@@ -57,15 +56,15 @@
             </div>
         </div>
         <div class="flex flex-col w-full flex flex-col">
-            <div class="text-white text-4xl font-salsa pl-10">
-                <p class="text-3xl font-extrabold text-center">
+            <div class="text-white text-4xl font-salsa">
+                <p class="text-2xl lg:text-3xl md:text-3xl font-extrabold text-center">
                     {{$item['title']}}
                 </p>
             </div>
 
-            <div class="flex p-10 text-lg h-1/2">
-                <div class="flex flex-col text-white w-1/2 justify-around pr-5 border-r-2 border-white">
-                    <div class="flex justify-between">
+            <div class="flex flex-col lg:flex-row md:flex-row p-5 lg:p-10 md:p-10 text-lg h-1/2 gap-y-4">
+                <div class="flex flex-col text-white w-full lg:w-1/2 md-1/2 justify-around pr-5 lg:border-r-2 md:border-r-2 lg:border-white md:border-white gap-y-4">
+                    <div class="flex flex-col lg:flex-row md:flex-row justify-between">
                         <p class="text-indigo-300 font-aleg font-extrabold">Author(s)-</p>
                         <p class="text-white font-aleg font-bold">
                             @isset($item['authors'])
@@ -75,7 +74,7 @@
                             @endisset
                         </p>
                     </div>
-                    <div class="flex justify-between">
+                    <div class="flex flex-col lg:flex-row md:flex-row  justify-between">
                         <p class="text-indigo-300 font-aleg  font-extrabold">Publisher-</p>
                         <p class="text-white font-aleg  font-bold">
                             @if(isset($item['publisher']) && strlen($item['publisher']) > 1)
@@ -86,7 +85,7 @@
 
                         </p>
                     </div>
-                    <div class="flex justify-between">
+                    <div class="flex flex-col lg:flex-row md:flex-row  justify-between">
                         <p class="text-indigo-300 font-aleg  font-extrabold">Publication Date-</p>
                         <p class="text-white font-aleg  font-bold">
                             @isset($item['publication_date'])
@@ -99,8 +98,8 @@
                 </div>
 
                 {{--                The two columns--}}
-                <div class="flex flex-col w-1/2 justify-around pl-5 text-lg">
-                    <div class="flex justify-between text-white">
+                <div class="flex flex-col w-full justify-around  lg:pl-5 md:pl-5 lg:w-1/2 md:1/2 text-lg gap-y-4">
+                    <div class="flex flex-col lg:flex-row md:flex-row justify-between text-white">
                         <p class="text-indigo-300 font-aleg  font-extrabold">Category-</p>
                         <p class="text-white font-aleg  font-bold">
                             @isset($item['categories'])
@@ -110,7 +109,7 @@
                             @endisset
                         </p>
                     </div>
-                    <div class="flex justify-between text-white">
+                    <div class="flex flex-col lg:flex-row md:flex-row justify-between text-white">
                         <p class="text-indigo-300  font-aleg font-extrabold">ISBN-13-</p>
                         <p class="text-white font-aleg  font-bold">
                             @isset($item['isbn_13'])
@@ -120,7 +119,7 @@
                             @endisset
                         </p>
                     </div>
-                    <div class="flex justify-between text-white">
+                    <div class="flex flex-col lg:flex-row md:flex-row justify-between text-white">
                         <p class="text-indigo-300 font-aleg  font-extrabold">Page Count-</p>
                         <p class="text-white font-aleg font-bold">
                             @isset($item['page_count'])
@@ -133,31 +132,34 @@
                 </div>
             </div>
 
-            <div class="rounded-lg bg-indigo-900 mt-8 mx-12 p-3 w-full flex justify-center">
-                <p class="text-white font-aleg leading-loose text-md">
-                    @if(isset($item['description']) && strlen($item['description']) > 0)
-                        @if(str_word_count($item['description']) > 80)
-                            {{implode(' ', array_slice(explode(' ', $item['description']), 0, 80))}}
-                            <span id="ellipses">...</span>
-                            <span id="show-more">
+            <div class="px-2 w-full">
+                <div class="rounded-lg bg-indigo-900 mt-8 p-3 w-full flex justify-center">
+                    <p class="text-white font-aleg leading-loose text-md">
+                        @if(isset($item['description']) && strlen($item['description']) > 0)
+                            @if(str_word_count($item['description']) > 80)
+                                {{implode(' ', array_slice(explode(' ', $item['description']), 0, 80))}}
+                                <span id="ellipses">...</span>
+                                <span id="show-more">
                                         <button id="show_more_button" class="text-yellow-800" onclick="showMore()">Show more</button>
                                         <span id="more-content" class="hidden">{{implode(' ', array_slice(explode(' ', $item['description']), 80, strlen($item['description'])))}}</span>
                                     </span>
 
-                            <span id="less-content" class="hidden">
+                                <span id="less-content" class="hidden">
                                          <button id="show_less_button" class="text-yellow-800" onclick="showLess()">Show less</button>
                                     </span>
-                        @else
-                            {{$item['description']}}
-                        @endif
+                            @else
+                                {{$item['description']}}
+                            @endif
 
-                    @else
-                        No description.
-                    @endif
-                </p>
+                        @else
+                            No description.
+                        @endif
+                    </p>
+                </div>
             </div>
-            <div class="flex justify-end mt-8">
-                <div class="flex w-1/4 justify-end text-white gap-x-4">
+
+            <div class="flex justify-center lg:justify-end md:justify-end mt-8">
+                <div class="flex w-3/4 justify-center lg:w-1/4 md:w-1/4 lg:justify-end md:justify-end text-white gap-x-4">
                     @auth()
                         <button id="readButton" class="bg-blue-800 hover:bg-blue-500 font-salsa rounded-lg p-2 w-1/3 disabled:opacity-10" onclick="loadBook('{{$item['isbn_13']}}')">Read</button>
                         <button class="bg-blue-800 hover:bg-blue-500 font-salsa rounded-lg p-2 w-1/3" onclick="shareSearch()">Share</button>

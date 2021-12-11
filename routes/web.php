@@ -4,11 +4,13 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\LoadMore;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ReviewsController;
 use App\Http\Controllers\SearchItemsController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\ShareController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserVoteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -56,3 +58,10 @@ Route::get('following',[DashboardController::class,'following'])->middleware('au
 
 Route::post('avatar',[UserController::class,'update'])->middleware('auth');
 Route::post('aboutme',[UserController::class,'update'])->middleware('auth');
+
+
+Route::post('notification/read',[NotificationController::class,'update'])->middleware(('auth'));
+Route::post('notification/remove',[NotificationController::class,'destroy'])->middleware(('auth'));
+
+Route::post('review/like',[UserVoteController::class,'update'])->middleware(('auth'));
+Route::post('review/dislike',[UserVoteController::class,'update'])->middleware(('auth'));

@@ -6,6 +6,7 @@ use App\Services\BookCollector;
 use Google\Client;
 use Google\Service\Books;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -33,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Paginator::useTailwind();
         Model::unguard();
     }
 }

@@ -3,8 +3,8 @@
         <p class="text-white font-salsa text-3xl pt-4">
             Read this book already? Write a review!</p>
     </div>
-    <div class="flex justify-center mt-16">
-        <div class="w-2/6 rounded-lg bg-indigo-300 py-2">
+    <div class="flex justify-center mt-16 w-full px-2">
+        <div class="w-full lg:w-2/6 md:w-2/6 rounded-lg bg-indigo-300 py-2">
             <div class="p-7">
                 <form class="max-h-full" method="POST" action="/review">
                     @csrf
@@ -64,76 +64,72 @@
 
 
         </div>
-        <div class="flex flex-col text-lg w-review gap-y-12 mt-12 ml-10">
-            @foreach ($reviews as $review)
-                <div class="flex gap-x-2 w-full pl-2 pr-4 py-2 bg-gray-200 rounded-lg">
-                    <div class="flex flex-col w-1/5 self-center py-2 h-full">
-                        <div class="flex h-screen/8 self-center">
-                            @isset($review->user->avatar)
-                                <img id="avatar_pic" src="{{asset('storage/' . $review->user->avatar)}}" class="bg-cover max-w-full w-full h-full rounded-lg">
-                            @else
-                                <img id="avatar_pic" src='images/default-user.png' class="bg-cover max-w-full w-full h-full rounded-lg">
+        <div class="w-full flex justify-center lg:justify-start md:justify-start">
+            <div class="flex flex-col text-lg w-5/6 lg:w-review md:w-1/2 gap-y-12 mt-12 ml-2 lg:ml-10 md:ml-10">
+                @foreach ($reviews as $review)
+                    <div class="flex gap-x-2 w-full pl-2 pr-4 py-2 bg-gray-200 rounded-lg">
+                        <div class="flex flex-col w-1/5 self-center py-2 h-full">
+                            <div class="flex h-screen/8 self-center">
+                                @isset($review->user->avatar)
+                                    <img id="avatar_pic" src="{{asset('storage/' . $review->user->avatar)}}" class="bg-cover max-w-full w-full h-full rounded-lg">
+                                @else
+                                    <img id="avatar_pic" src='/images/default-user.png' class="bg-cover max-w-full w-full h-full rounded-lg">
 
-                            @endisset
+                                @endisset
 
+                            </div>
+                            <div class="flex justify-center mt-2">
+                                @auth()
+                                    @unless(auth()->user()->id == $review->user->id)
+                                        @if($review->user->followers->contains('id',auth()->user()->id))
+                                            <button id="unfollow_button-{{$loop->index}}" class="p-1 bg-red-500 text-white text-sm rounded-lg" onclick="unfollowUser({{$review->user->id}},{{$loop->index}})">Unfollow</button>
+                                        @else
+                                            <button id="follow_button-{{$loop->index}}" class="p-1 bg-blue-500 text-white text-sm rounded-lg" onclick="followUser({{$review->user->id}},{{$loop->index}})">Follow</button>
+                                        @endif
+                                    @endunless
+                                @endauth
+                            </div>
                         </div>
-                        <div class="flex justify-center mt-2">
-                            @auth()
-                                @unless(auth()->user()->id == $review->user->id)
-                                    @if($review->user->followers->contains('id',auth()->user()->id))
-                                        <button id="unfollow_button-{{$loop->index}}" class="p-1 bg-red-500 text-white text-sm rounded-lg" onclick="unfollowUser({{$review->user->id}},{{$loop->index}})">Unfollow</button>
-                                    @else
-                                        <button id="follow_button-{{$loop->index}}" class="p-1 bg-blue-500 text-white text-sm rounded-lg" onclick="followUser({{$review->user->id}},{{$loop->index}})">Follow</button>
-                                    @endif
-                                @endunless
-                            @endauth
+                        <div class="w-4/5 flex flex-col pb-2">
+                            <div class="flex pb-2 justify-between">
+                                <div>
+                                    <p class="font-bold text-xl font-salsa">
+                                        {{$review->user->username}}
+                                        <span class="text-xs font-aleg">● {{$review->created_at->diffForHumans()}}</span>
+                                    </p>
+                                </div>
+
+
+                                <div id="container-vote" class="flex gap-x-4">
+                                    <x-book.review-vote :review="$review" :loop="$loop"></x-book.review-vote>
+
+                                </div>
+                            </div>
+
+                            <div class="flex justify-start pb-2">
+                                <div class="flex stars-container">
+                                    <x-main.stars :rating="$review->rating"></x-main.stars>
+                                </div>
+                            </div>
+                            <div class="w-full text-sm bg-gray-300 rounded-lg max-h-full h-full">
+                                <p class="break-words px-2 py-1">{{$review->review_body}}</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="w-4/5 flex flex-col pb-2">
-                        <div class="flex pb-2 justify-between">
-                            <div>
-                                <p class="font-bold text-xl font-salsa">
-                                    {{$review->user->username}}
-                                    <span class="text-xs font-aleg">● {{$review->created_at->diffForHumans()}}</span>
-                                </p>
-                            </div>
-                            <div class="flex gap-x-4">
-                                <button>
-                                    <span class="text-xs">23 likes</span>
-                                    <i class="far fa-thumbs-up"></i>
+                @endforeach
+                    {{$reviews->links()}}
 
-                                </button>
-                                <button>
-                                    <span class="text-xs">4 dislikes</span>
-                                    <i class="far fa-thumbs-down"></i>
-                                </button>
 
-                            </div>
-                        </div>
-
-                        <div class="flex justify-start pb-2">
-                            <div class="flex stars-container">
-                                <x-main.stars :rating="$review->rating"></x-main.stars>
-                            </div>
-                        </div>
-                        <div class="w-full text-sm bg-gray-300 rounded-lg max-h-full h-full">
-                            <p class="break-words px-2 py-1">{{$review->review_body}}</p>
-                        </div>
+                @else
+                    <div class="mt-24 pl-10">
+                        <p class="text-4xl text-white font-salsa">
+                            No reviews yet.
+                        </p>
                     </div>
-                </div>
-            @endforeach
-            {{$reviews->links()}}
+                @endif
 
 
-            @else
-                <div class="mt-24 pl-10">
-                    <p class="text-4xl text-white font-salsa">
-                        No reviews yet.
-                    </p>
-                </div>
-            @endif
-
-
+            </div>
         </div>
 
 </section>

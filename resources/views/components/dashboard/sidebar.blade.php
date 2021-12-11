@@ -1,6 +1,7 @@
 <div id="sidebar" class="h-screen w-sidebar lg:w-big-sidebar md:w-big-sidebar sticky z-10 top-0 left-0 bottom-0 bg-light-purple flex flex-col justify-between p-8 flex-5">
     <div class="flex justify-center">
-        <a class="text-white font-salsa text-5xl" href="/">Bookslink</a>
+        <a class="text-white font-salsa text-5xl hidden lg:block md:block" href="/">Bookslink</a>
+        <a class="text-white font-salsa text-5xl  lg:hidden md:hidden" href="/">BL</a>
     </div>
     <div class="flex flex-col gap-6 lg:px-4 md:px-2">
         <div class="lg:px-2 md:px-2 py-4 rounded-lg hover:bg-indigo-800 cursor-pointer">

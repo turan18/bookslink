@@ -10,6 +10,7 @@
     <script type="text/javascript" src="{{asset('js/friend.js')}}" defer></script>
     <script type="text/javascript" src="{{asset('js/share.js')}}" defer></script>
     <script type="text/javascript" src="{{asset('js/notifications.js')}}" defer></script>
+    <script type="text/javascript" src="{{asset('js/review.js')}}" defer></script>
 
 </head>
 

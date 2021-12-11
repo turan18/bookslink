@@ -12,6 +12,11 @@ module.exports = {
         },
         margin: {
           'half':'50%',
+
+        },
+        inset: {
+            '40%': '40%',
+            '45%':'45%',
         },
         fontFamily:{
             'salsa': ['Salsa', 'cursive'],
@@ -35,6 +40,9 @@ module.exports = {
             "screen/11": "calc(100vw / 11)",
 
 
+        },
+        maxHeight:{
+          "screen/2-half": "calc(100vh / 2.2)"
         },
         height:{
             "more-half-view": "51vh",
