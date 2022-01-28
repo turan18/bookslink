@@ -96,19 +96,11 @@ class UserController extends Controller
 
         }
         elseif ($request->has('about_me')){
-//            $request->validate([
-//                'about_me' => ['required']
-//            ]);
 
             $user->about_me = $request->get('about_me');
             $user->save();
 
             return response()->json($request->get('about_me'));
-
-
-
-
-
 
         }
     }

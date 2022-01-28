@@ -32,7 +32,7 @@ class FavoritesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -81,7 +81,7 @@ class FavoritesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -93,12 +93,12 @@ class FavoritesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy()
+    public function destroy(Request $request)
     {
-        FavoritedBook::find(request()->get('book_id'))->delete();
+        FavoritedBook::find($request->get('book_id'))->delete();
 
         return response()->json('Sucess');
     }

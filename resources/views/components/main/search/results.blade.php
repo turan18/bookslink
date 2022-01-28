@@ -61,7 +61,6 @@
 
                         </div>
                     </div>
-
                 @endforeach
             @else
                 <p>No results found.</p>

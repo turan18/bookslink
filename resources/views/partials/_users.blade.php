@@ -1,7 +1,7 @@
 @if(count($users) > 0)
-        <div class="flex justify-between gap-12 flex-wrap px-12">
+        <div class="flex flex-col items-center lg:flex-rox md:flex-row md:justify-between lg:justify-between lg:flex-wrap md:flex-wrap lg:px-12 md:px-12 gap-12 ">
             @foreach($users as $user)
-                <div class="w-5/12">
+                <div class="w-5/6 lg:w-5/12 md:w-5/12">
                     <div class="flex bg-light-purple py-4 pl-4 rounded-lg gap-x-4">
                         <div class="w-1/2 flex flex-col self-center">
                             <div class="flex justify-center w-full">

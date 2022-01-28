@@ -6,7 +6,7 @@
     </div>
     <div class="flex justify-center w-full mt-12">
         @if($user->followers->count() > 0)
-            <div class="flex justify-between gap-12 flex-wrap w-5/6 lg:w-3/4 md:w-3/4 px-2 lg:px-12 md:px-12 bg-dash py-12 rounded-lg">
+            <div class="flex justify-between gap-12 flex-wrap w-95% lg:w-3/4 md:w-3/4 px-1 lg:px-12 md:px-12 bg-dash py-12 rounded-lg">
                 @foreach($user->followers as $following_you)
                     <div class="w-full lg:w-follow-lg md:w-5/12 p-2">
                         <div class="flex bg-light-purple py-4 pl-4 rounded-lg gap-x-4">

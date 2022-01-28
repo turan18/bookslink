@@ -57,12 +57,12 @@
         </div>
         <div class="flex flex-col w-full flex flex-col">
             <div class="text-white text-4xl font-salsa">
-                <p class="text-2xl lg:text-3xl md:text-3xl font-extrabold text-center">
+                <p class="text-3xl lg:text-3xl md:text-3xl font-extrabold text-center">
                     {{$item['title']}}
                 </p>
             </div>
 
-            <div class="flex flex-col lg:flex-row md:flex-row p-5 lg:p-10 md:p-10 text-lg h-1/2 gap-y-4">
+            <div class="flex flex-col lg:flex-row md:flex-row p-5 lg:p-10 md:p-10 text-lg lg:h-1/2 md:h-1/2 gap-y-4">
                 <div class="flex flex-col text-white w-full lg:w-1/2 md-1/2 justify-around pr-5 lg:border-r-2 md:border-r-2 lg:border-white md:border-white gap-y-4">
                     <div class="flex flex-col lg:flex-row md:flex-row justify-between">
                         <p class="text-indigo-300 font-aleg font-extrabold">Author(s)-</p>
@@ -98,7 +98,7 @@
                 </div>
 
                 {{--                The two columns--}}
-                <div class="flex flex-col w-full justify-around  lg:pl-5 md:pl-5 lg:w-1/2 md:1/2 text-lg gap-y-4">
+                <div class="flex flex-col w-full justify-around  lg:pl-5 md:pl-5 lg:w-1/2 md:w-1/2 text-lg gap-y-4">
                     <div class="flex flex-col lg:flex-row md:flex-row justify-between text-white">
                         <p class="text-indigo-300 font-aleg  font-extrabold">Category-</p>
                         <p class="text-white font-aleg  font-bold">
@@ -134,7 +134,7 @@
 
             <div class="px-2 w-full">
                 <div class="rounded-lg bg-indigo-900 mt-8 p-3 w-full flex justify-center">
-                    <p class="text-white font-aleg leading-loose text-md">
+                    <p class="text-white font-aleg leading-loose text-md break-all ">
                         @if(isset($item['description']) && strlen($item['description']) > 0)
                             @if(str_word_count($item['description']) > 80)
                                 {{implode(' ', array_slice(explode(' ', $item['description']), 0, 80))}}
@@ -164,8 +164,8 @@
                         <button id="readButton" class="bg-blue-800 hover:bg-blue-500 font-salsa rounded-lg p-2 w-1/3 disabled:opacity-10" onclick="loadBook('{{$item['isbn_13']}}')">Read</button>
                         <button class="bg-blue-800 hover:bg-blue-500 font-salsa rounded-lg p-2 w-1/3" onclick="shareSearch()">Share</button>
                     @else
-                        <button class="bg-gray-600 font-salsa rounded-lg p-2 w-1/3" disabled>Read</button>
-                        <button class="bg-gray-600 font-salsa rounded-lg p-2 w-1/3" disabled>Share</button>
+                        <button class="bg-gray-600 font-salsa rounded-lg p-2 w-1/3 cursor-not-allowed" disabled>Read</button>
+                        <button class="bg-gray-600 font-salsa rounded-lg p-2 w-1/3 cursor-not-allowed" disabled>Share</button>
                     @endauth
 
 

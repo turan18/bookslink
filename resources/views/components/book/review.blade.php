@@ -1,6 +1,6 @@
 <section class="bg-indigo-800 mt-36 pb-48">
     <div class="flex justify-center">
-        <p class="text-white font-salsa text-3xl pt-4">
+        <p class="text-white font-salsa text-center text-3xl pt-4">
             Read this book already? Write a review!</p>
     </div>
     <div class="flex justify-center mt-16 w-full px-2">
@@ -39,7 +39,14 @@
                             <label for="r1" ><i class="fa fa-star"></i></label>
                         </div>
 
-                        <button type="submit" class="bg-light-purple p-1 font-salsa rounded-lg text-white">Publish</button>
+                        @auth()
+                            <button type="submit" class="bg-light-purple p-1 font-salsa rounded-lg text-white">Publish</button>
+
+                        @else
+
+                            <button type="submit" class="bg-gray-600 cursor-not-allowed p-1 font-salsa rounded-lg text-white" disabled>Publish</button>
+
+                        @endauth
                     </div>
 
                 </form>

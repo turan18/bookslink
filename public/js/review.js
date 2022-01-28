@@ -1,14 +1,7 @@
-let liked = false;
-let disliked = false;
 
 
 function likeReview(id,elem,index,alreadyLiked=false,alreadyDisliked=false){
-    if(alreadyLiked){
-        liked = true;
-    }
-    if(alreadyDisliked){
-        disliked = true;
-    }
+
 
     console.log(elem.getAttribute('onclick'))
 
@@ -20,7 +13,7 @@ function likeReview(id,elem,index,alreadyLiked=false,alreadyDisliked=false){
     const like_icon = elem.firstElementChild.nextElementSibling.nextElementSibling;
     const type = 'like';
 
-    if(! liked && !disliked){ // have not liked yet or disliked yet
+    if(! alreadyLiked && !alreadyDisliked){ // have not liked yet or disliked yet
         console.log('Liking, have not liked or disliked before.')
         like_counter.textContent = (parseInt(like_counter.textContent) + 1).toString();
         like_icon.classList.add('text-blue-500');
@@ -28,9 +21,8 @@ function likeReview(id,elem,index,alreadyLiked=false,alreadyDisliked=false){
         elem.setAttribute('onclick',`likeReview(${id},this,${index},true,false)`);
         dislike_button.setAttribute('onclick',`dislikeReview(${id},this,${index},true,false)`);
 
-        liked = true;
     }
-    else if(!liked && disliked){ // disliked then clicked liked
+    else if(!alreadyLiked && alreadyDisliked){ // disliked then clicked liked
         console.log('Liking, you have disliked before.')
         like_counter.textContent = (parseInt(like_counter.textContent) + 1).toString();
         dislike_counter.textContent = (parseInt(dislike_counter.textContent) - 1).toString();
@@ -40,8 +32,6 @@ function likeReview(id,elem,index,alreadyLiked=false,alreadyDisliked=false){
         elem.setAttribute('onclick',`likeReview(${id},this,${index},true,false)`);
         dislike_button.setAttribute('onclick',`dislikeReview(${id},this,${index},true,false)`);
 
-        liked = true;
-        disliked = false;
 
 
     }
@@ -52,7 +42,6 @@ function likeReview(id,elem,index,alreadyLiked=false,alreadyDisliked=false){
         like_icon.classList.remove('text-blue-500');
         elem.setAttribute('onclick',`likeReview(${id},this,${index})`);
         dislike_button.setAttribute('onclick',`dislikeReview(${id},this,${index})`);
-        liked = false;
 
     }
 
@@ -72,12 +61,6 @@ function likeReview(id,elem,index,alreadyLiked=false,alreadyDisliked=false){
 }
 
 function dislikeReview(id,elem,index,alreadyLiked=false,alreadyDisliked = false){
-    if(alreadyDisliked){
-        disliked = true;
-    }
-    if(alreadyLiked){
-        liked = true;
-    }
 
     const like_button = document.querySelector(`#like-${index}`);
     const like_counter = like_button.firstElementChild;
@@ -88,7 +71,7 @@ function dislikeReview(id,elem,index,alreadyLiked=false,alreadyDisliked = false)
     const type = 'dislike';
 
 
-    if(! disliked && !liked){
+    if(! alreadyDisliked && !alreadyLiked){
         console.log('Disliking, you have not liked or disliked before.');
 
         dislike_counter.textContent = (parseInt(elem.textContent) + 1).toString();
@@ -97,9 +80,9 @@ function dislikeReview(id,elem,index,alreadyLiked=false,alreadyDisliked = false)
         elem.setAttribute('onclick',`dislikeReview(${id},this,${index},false,true)`);
         like_button.setAttribute('onclick',`likeReview(${id},this,${index},false,true)`);
 
-        disliked = true;
+
     }
-    else if(!disliked && liked){
+    else if(!alreadyDisliked && alreadyLiked){
         console.log('Disliking, you have liked before.')
         dislike_counter.textContent = (parseInt(elem.textContent) + 1).toString();
         like_counter.textContent = (parseInt(like_counter.textContent) - 1).toString();
@@ -109,8 +92,7 @@ function dislikeReview(id,elem,index,alreadyLiked=false,alreadyDisliked = false)
         elem.setAttribute('onclick',`dislikeReview(${id},this,${index},false,true)`);
         like_button.setAttribute('onclick',`likeReview(${id},this,${index},false,true)`);
 
-        disliked = true;
-        liked = false;
+
     }
     else{
         console.log('Removing original dislike');
@@ -119,7 +101,6 @@ function dislikeReview(id,elem,index,alreadyLiked=false,alreadyDisliked = false)
 
         elem.setAttribute('onclick',`dislikeReview(${id},this,${index})`);
         like_button.setAttribute('onclick',`likeReview(${id},this,${index})`);
-        disliked = false;
 
     }
 

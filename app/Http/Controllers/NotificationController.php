@@ -72,7 +72,7 @@ class NotificationController extends Controller
         $data = json_decode($request->getContent(),true);
 
         DatabaseNotification::find($data)->markAsRead();
-        return response()->json(['Success'=>'Notifaction marked as read.']);
+        return response()->json(['Success'=>'Notificaction marked as read.']);
     }
 
     /**
@@ -86,7 +86,7 @@ class NotificationController extends Controller
         $data = json_decode($request->getContent(),true);
 
         DatabaseNotification::find($data)->delete();
-        return response()->json(['Success'=>'Notifaction removed.']);
+        return response()->json(['Success'=>'Notificaction removed.']);
 
     }
 }

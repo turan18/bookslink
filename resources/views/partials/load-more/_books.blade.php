@@ -1,15 +1,13 @@
 @if(count($items) > 0)
-
     @foreach($items as $item)
-        <div class="flex">
-            <div class="w-1/3 flex pl-12">
+        <div class="flex flex-col lg:flex-row md:flex-row">
+            <div class="w-full lg:w-1/3 md:w-1/3 flex justify-center">
                 <img class="h-sm-book-h w-sm-book-w rounded-lg" src="{{$item['large-thumbnail'] ?? $item['thumbnail']}}">
             </div>
-            <div class="w-2/3 bg-light-purple rounded-xl flex flex-col px-4 py-2">
-
+            <div class="w-full mt-4 lg:w-2/3 lg:mt-0 md:mt-0 md:w-2/3 bg-light-purple rounded-xl flex flex-col px-4 py-2">
                 <div class="flex border-b border-black pb-2">
                     <div class="flex flex-col w-3/4">
-                        <p class="font-extrabold font-aleg text-lg pb-2">{{$item['title']}}</p>
+                        <p class="font-extrabold font-aleg text-lg pb-1">{{$item['title']}}</p>
                         <div class="flex justify-start pb-2">
                             <div class="flex stars-container">
                                 @isset($item['full_rating'])
@@ -19,7 +17,7 @@
                                 @endisset
                             </div>
                         </div>
-                        <p class="text-sm">By:
+                        <p class="text-sm font-aleg">By:
                             @if(isset($item['authors']))
                                 @if(! $item['multiple_authors'])
                                     {{$item['authors'][0]}}
@@ -30,6 +28,7 @@
                                         @else
                                             {{$value}}
                                         @endunless
+
                                     @endforeach
                                 @endif
                             @else
@@ -47,7 +46,7 @@
                 </div>
 
                 <div class="mt-4 mb-2">
-                    <p class="font-salsa">
+                    <p class="font-salsa break-words">
                         @if(isset($item['description']))
                             {!! $item['snippet'] !!}
                         @else
@@ -58,7 +57,6 @@
 
             </div>
         </div>
-
     @endforeach
 @else
     <p>No more results.</p>
